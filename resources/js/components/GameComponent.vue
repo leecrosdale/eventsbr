@@ -27,9 +27,11 @@
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
-        },
+        name: "GameComponent.vue",
         props: ['terrain']
     }
 </script>
+
+<style scoped>
+
+</style>

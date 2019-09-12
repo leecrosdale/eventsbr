@@ -11,7 +11,7 @@ class Map extends Model
         return $this->hasMany(Terrain::class);
     }
 
-    public function generateTerrain()
+    public function generateMap()
     {
         $terrains = $this->terrain;
 

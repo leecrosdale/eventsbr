@@ -14,7 +14,7 @@ class MapController extends Controller
 
         $map = Map::first();
 
-        return view('map.overview')->withTerrain($map->generateTerrain());
+        return view('map.overview')->withTerrain($map->generateMap());
     }
 
 
@@ -26,7 +26,9 @@ class MapController extends Controller
      */
     public function index()
     {
-        //
+        $map = Map::first();
+
+        return view('game.index');
     }
 
     /**
