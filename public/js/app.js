@@ -1941,11 +1941,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
   },
-  props: ['terrain']
+  props: ['terrain'],
+  data: function data() {
+    return {
+      terrainColors: ['#228B22', '#808000', '#7CFC00', '#00BFFF']
+    };
+  }
 });
 
 /***/ }),
@@ -37377,69 +37385,105 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Map Component")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c(
-              "table",
-              _vm._l(_vm.terrain, function(row) {
-                return _c(
-                  "tr",
-                  { staticStyle: { height: "32px" } },
-                  _vm._l(row, function(col) {
-                    return _c(
-                      "td",
+  return _c(
+    "table",
+    {
+      staticStyle: {
+        border: "0px",
+        "border-spacing": "0",
+        "border-collapse": "collapse",
+        "overflow-x": "scroll",
+        "table-layout": "fixed"
+      }
+    },
+    _vm._l(_vm.terrain, function(row) {
+      return _c(
+        "tr",
+        { staticStyle: { height: "64px", padding: "0px" } },
+        _vm._l(row, function(col) {
+          return _c(
+            "td",
+            {
+              staticStyle: {
+                border: "1px solid black",
+                width: "64px",
+                height: "64px",
+                "max-width": "64px",
+                "max-height": "64px"
+              },
+              style: { "background-color": _vm.terrainColors[col.type] }
+            },
+            [
+              _vm._l(col.players, function(player) {
+                return _c("p", [
+                  _c(
+                    "svg",
+                    {
+                      attrs: {
+                        viewBox: "0 0 25 25",
+                        xmlns: "http://www.w3.org/2000/svg"
+                      }
+                    },
+                    [
+                      _c("circle", {
+                        attrs: { cx: "12.5", cy: "12.5", r: "10" }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "text",
+                        {
+                          attrs: {
+                            x: "9",
+                            y: "17",
+                            fill: "red",
+                            "font-family": "monospace"
+                          }
+                        },
+                        [_vm._v(_vm._s(player.username[0]))]
+                      )
+                    ]
+                  )
+                ])
+              }),
+              _vm._v(" "),
+              Object.keys(col.items).length > 0
+                ? _c("p", [
+                    _c(
+                      "svg",
                       {
-                        staticStyle: {
-                          border: "1px solid black",
-                          width: "32px"
+                        attrs: {
+                          viewBox: "0 0 25 25",
+                          xmlns: "http://www.w3.org/2000/svg"
                         }
                       },
                       [
-                        _vm._v(
-                          "\n                                " +
-                            _vm._s(col.x) +
-                            ", " +
-                            _vm._s(col.y) +
-                            "\n                                "
-                        ),
-                        _vm._l(col.players, function(player) {
-                          return _c("p", [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(player.username) +
-                                "\n                                "
-                            )
-                          ])
-                        }),
+                        _c("rect", { attrs: { width: "25", height: "25" } }),
                         _vm._v(" "),
-                        _vm._l(col.items, function(item) {
-                          return _c("p", [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(item.name) +
-                                "\n                                "
-                            )
-                          ])
-                        })
-                      ],
-                      2
+                        _c(
+                          "text",
+                          {
+                            attrs: {
+                              x: "9",
+                              y: "17",
+                              fill: "red",
+                              "font-family": "monospace"
+                            }
+                          },
+                          [_vm._v(_vm._s(Object.keys(col.items).length))]
+                        )
+                      ]
                     )
-                  }),
-                  0
-                )
-              }),
-              0
-            )
-          ])
-        ])
-      ])
-    ])
-  ])
+                  ])
+                : _vm._e()
+            ],
+            2
+          )
+        }),
+        0
+      )
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
