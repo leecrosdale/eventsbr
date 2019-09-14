@@ -2,29 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Map;
+use App\Game;
 use Illuminate\Http\Request;
 
-class MapController extends Controller
+class GameController extends Controller
 {
-
-
-    public function overview()
-    {
-
-        $map = Map::first();
-
-        return view('map.overview')->withTerrain($map->generateMap());
-    }
-
-    public function map()
-    {
-        $map = Map::first();
-        return $map->generateMap();
-    }
-
-
-
     /**
      * Display a listing of the resource.
      *
@@ -32,9 +14,7 @@ class MapController extends Controller
      */
     public function index()
     {
-        $map = Map::first();
-
-        return view('game.index');
+        //
     }
 
     /**
@@ -61,10 +41,10 @@ class MapController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Map  $map
+     * @param  \App\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function show(Map $map)
+    public function show(Game $game)
     {
         //
     }
@@ -72,10 +52,10 @@ class MapController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Map  $map
+     * @param  \App\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function edit(Map $map)
+    public function edit(Game $game)
     {
         //
     }
@@ -84,10 +64,10 @@ class MapController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Map  $map
+     * @param  \App\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Map $map)
+    public function update(Request $request, Game $game)
     {
         //
     }
@@ -95,10 +75,10 @@ class MapController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Map  $map
+     * @param  \App\Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Map $map)
+    public function destroy(Game $game)
     {
         //
     }

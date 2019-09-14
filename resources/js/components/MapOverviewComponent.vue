@@ -31,17 +31,25 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
+            this.getMap();
         },
-        props: ['terrain'],
+        // props: ['terrain'],
         data(){
             return {
+                terrain: [],
                 terrainColors: [
                     '#228B22',
                     '#808000',
                     '#7CFC00',
                     '#00BFFF'
                 ]
+            }
+        },
+        methods: {
+            getMap() {
+                window.axios.get('update-map').then((response) => {
+                    this.terrain = response.data;
+                });
             }
         }
 

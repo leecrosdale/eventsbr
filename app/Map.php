@@ -11,11 +11,19 @@ class Map extends Model
         return $this->hasMany(Terrain::class);
     }
 
-    public function generateMap()
+    public function generateMap($x = null, $y = null, $max_x = 4, $max_y = 4)
     {
-        $terrains = $this->terrain;
+
+        if ($x === null && $y === null) {
+            $terrains = $this->terrain;
+        } else {
+            $terrains = $this->terrain()
+                ->where('x', '>=', $x)->where('x', '<=', $max_x)
+                ->where('y', '>=', $y)->where('y', '<=', $max_y)->get();
+        }
 
         $data = [];
+
 
         foreach ($terrains as $terrain) {
             $data[$terrain->y][$terrain->x] = $terrain;

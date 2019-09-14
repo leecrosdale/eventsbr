@@ -13,14 +13,16 @@ class CreateItemTerrainTable extends Migration
      */
     public function up()
     {
-        Schema::create('item_terrain', function (Blueprint $table) {
+        Schema::create('game_item', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('item_id');
+            $table->unsignedBigInteger('game_id');
             $table->unsignedBigInteger('terrain_id');
             $table->timestamps();
 
             $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('terrain_id')->references('id')->on('terrains');
+            $table->foreign('game_id')->references('id')->on('games');
         });
     }
 

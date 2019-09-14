@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMapsTable extends Migration
+class CreateGamesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateMapsTable extends Migration
      */
     public function up()
     {
-        Schema::create('maps', function (Blueprint $table) {
+        Schema::create('games', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('map_id');
             $table->string('name');
-            $table->tinyInteger('active')->default(1);
-            $table->integer('max_x');
-            $table->integer('max_y');
+            $table->string('password');
+            $table->tinyInteger('status')->default(0);
+            $table->integer('max_players')->default(10);
             $table->timestamps();
+            $table->foreign('map_id')->references('id')->on('maps');
         });
     }
 
@@ -30,6 +32,6 @@ class CreateMapsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('maps');
+        Schema::dropIfExists('games');
     }
 }
