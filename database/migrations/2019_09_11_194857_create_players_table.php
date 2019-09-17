@@ -16,17 +16,11 @@ class CreatePlayersTable extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('terrain_id');
             $table->string('username', 30);
 
-            $table->integer('health')->default(100);
-            $table->integer('stamina')->default(100);
-
-            $table->tinyInteger('state'); // Standing / Crawling
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('terrain_id')->references('id')->on('terrains');
         });
     }
 

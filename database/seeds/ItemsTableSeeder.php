@@ -29,23 +29,18 @@ class ItemsTableSeeder extends Seeder
             ]);
         }
 
-
         $games = \App\Game::all();
-
-
+//
+//
         foreach ($games as $game) {
-
 
             $items = 10;
 
             for ($i = 0; $i<$items; $i++) {
 
                 $terrain = \App\Terrain::where('type','!=', \App\Enums\TerrainType::WATER)->get()->random(1)->first();
-
                 $item = \App\Item::all()->random(1)->first();
-
-                $terrain->items()->attach(['item_id' => $item->id, 'game_id' => $game->id]);
-
+                $game->items()->attach([['item_id' => $item->id, 'x' => $terrain->x, 'y' => $terrain->y]]);
                 $terrain->save();
 
             }

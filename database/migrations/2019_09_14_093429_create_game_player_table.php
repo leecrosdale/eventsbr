@@ -17,6 +17,15 @@ class CreateGamePlayerTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('player_id');
             $table->unsignedBigInteger('game_id');
+
+            $table->integer('x');
+            $table->integer('y');
+
+            $table->integer('health')->default(100);
+            $table->integer('stamina')->default(100);
+
+            $table->tinyInteger('state'); // Standing / Crawling
+
             $table->timestamps();
 
             $table->foreign('player_id')->references('id')->on('players');

@@ -1940,10 +1940,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getMap();
@@ -1951,7 +1947,7 @@ __webpack_require__.r(__webpack_exports__);
   // props: ['terrain'],
   data: function data() {
     return {
-      terrain: [],
+      game: [],
       terrainColors: ['#228B22', '#808000', '#7CFC00', '#00BFFF']
     };
   },
@@ -1960,7 +1956,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       window.axios.get('update-map').then(function (response) {
-        _this.terrain = response.data;
+        _this.game = response.data;
       });
     }
   }
@@ -47678,7 +47674,7 @@ var render = function() {
         "table-layout": "fixed"
       }
     },
-    _vm._l(_vm.terrain, function(row) {
+    _vm._l(_vm.game, function(row) {
       return _c(
         "tr",
         { staticStyle: { height: "64px", padding: "0px" } },
@@ -47693,7 +47689,7 @@ var render = function() {
                 "max-width": "64px",
                 "max-height": "64px"
               },
-              style: { "background-color": _vm.terrainColors[col.type] }
+              style: { "background-color": _vm.terrainColors[col.terrain.type] }
             },
             [
               _vm._l(col.players, function(player) {
@@ -47728,7 +47724,7 @@ var render = function() {
                 ])
               }),
               _vm._v(" "),
-              Object.keys(col.items).length > 0
+              col.items && col.items.length > 0
                 ? _c("p", [
                     _c(
                       "svg",
@@ -47751,7 +47747,7 @@ var render = function() {
                               "font-family": "monospace"
                             }
                           },
-                          [_vm._v(_vm._s(Object.keys(col.items).length))]
+                          [_vm._v(_vm._s(col.items.length))]
                         )
                       ]
                     )

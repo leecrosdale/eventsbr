@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
 use App\Map;
 use Illuminate\Http\Request;
 
 class MapController extends Controller
 {
 
-
-    public function overview()
+    public function overview(Game $game)
     {
-
-        $map = Map::first();
-
-        return view('map.overview')->withTerrain($map->generateMap());
+        return view('map.overview')->withTerrain($game->generateMap());
     }
 
-    public function map()
+    public function map(Game $game)
     {
-        $map = Map::first();
-        return $map->generateMap();
+        return $game->generateMap();
     }
-
-
 
     /**
      * Display a listing of the resource.
@@ -32,8 +26,6 @@ class MapController extends Controller
      */
     public function index()
     {
-        $map = Map::first();
-
         return view('game.index');
     }
 

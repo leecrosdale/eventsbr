@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateItemTerrainTable extends Migration
+class CreateGameItemTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,11 +17,11 @@ class CreateItemTerrainTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('game_id');
-            $table->unsignedBigInteger('terrain_id');
+            $table->integer('x');
+            $table->integer('y');
             $table->timestamps();
 
             $table->foreign('item_id')->references('id')->on('items');
-            $table->foreign('terrain_id')->references('id')->on('terrains');
             $table->foreign('game_id')->references('id')->on('games');
         });
     }
