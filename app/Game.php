@@ -16,7 +16,7 @@ class Game extends Model
 
     public function players()
     {
-        return $this->belongsToMany(Player::class)->withPivot(['x','y']);
+        return $this->belongsToMany(Player::class)->withPivot(Player::$pivotStats);
     }
 
     public function items()
@@ -25,32 +25,46 @@ class Game extends Model
     }
 
 
-    public function generateMap($x = null, $y = null, $max_x = 4, $max_y = 4)
+    public function generateMap($x = null, $y = null)
     {
 
         $map = $this->map;
-
         if ($x === null && $y === null) {
             $terrains = $map->terrain;
+            $players = $this->players;
+            $items = $this->items;
         } else {
+
+            $max_x = $x + 4;
+            $max_y = $y + 4;
+
             $terrains = $map->terrain()
                 ->where('x', '>=', $x)->where('x', '<=', $max_x)
                 ->where('y', '>=', $y)->where('y', '<=', $max_y)->get();
+
+            $players = $this->players()->where('x', '>=', $x)->where('x', '<=', $max_x)
+                ->where('y', '>=', $y)->where('y', '<=', $max_y)->get();
+            $items = $this->items()->where('x', '>=', $x)->where('x', '<=', $max_x)
+                ->where('y', '>=', $y)->where('y', '<=', $max_y)->get();;
+
         }
+
 
         $data = [];
 
         foreach ($terrains as $terrain) {
             $data[$terrain->y][$terrain->x]['terrain'] = $terrain;
         }
-
-        foreach ($this->players as $player) {
+//
+        foreach ($players as $player) {
             $data[$player->pivot->y][$player->pivot->x]['players'][] = $player;
         }
 
-        foreach ($this->items as $item) {
+        foreach ($items as $item) {
             $data[$item->pivot->y][$item->pivot->x]['items'][] = $item;
         }
+
+
 
 
         return $data;

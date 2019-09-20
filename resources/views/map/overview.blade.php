@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="app">
-    <map-overview-component :terrain="{{ json_encode($terrain) }}"></map-overview-component>
+    <map-overview-component></map-overview-component>
 </div>
 
 </body>

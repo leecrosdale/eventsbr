@@ -27,19 +27,14 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 
 import Vuex from 'vuex'
 
-const store = new Vuex.Store({
-    state: {
-        count: 0
-    },
-    mutations: {
-        increment (state) {
-            state.count++
-        }
-    }
-});
-
+import store from './store'
 
 const app = new Vue({
     el: '#app',
-    store
+    store,
+    created() {
+        if (window.gameId) {
+            this.$store.commit('game/setGameId', window.gameId);
+        }
+    }
 });

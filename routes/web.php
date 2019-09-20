@@ -19,5 +19,16 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('{game}/overview', 'MapController@overview')->name('map.overview');
-Route::get('{game}/update-map', 'MapController@map')->name('map.map');
+Route::group(['prefix' => '{game}'], function() {
+
+    Route::get('overview', 'MapController@overview')->name('map.overview');
+//    Route::get('update-map', 'MapController@map')->name('map.map');
+    Route::get('play', 'PlayerController@play')->name('player.play');
+    Route::get('update-map', 'PlayerController@getUpdate')->name('player.update');
+
+
+});
+
+
+
+
