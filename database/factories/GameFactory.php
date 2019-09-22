@@ -8,6 +8,7 @@ $factory->define(\App\Game::class, function (Faker $faker) {
     return [
         'name' => $faker->company,
         'password' => 'secret',
-        'map_id' => \App\Map::all()->random(1)->first()->id
+        'map_id' => \App\Map::all()->random(1)->first()->id,
+        'current_turn' => 0
     ];
 });

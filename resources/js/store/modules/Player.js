@@ -1,6 +1,6 @@
 
 const state = {
-    player: [],
+    player: {},
 };
 
 const getters = {

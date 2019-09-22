@@ -34,7 +34,7 @@ class ItemsTableSeeder extends Seeder
 //
         foreach ($games as $game) {
 
-            $items = 10;
+            $items = 100;
 
             for ($i = 0; $i<$items; $i++) {
 

@@ -7,7 +7,7 @@
             </div>
         </div>
         <table style="border:0px; border-spacing:0; border-collapse: collapse;  overflow-x: scroll; table-layout:fixed">
-            <tr style="height:64px; padding:0px;" v-for="row in game">
+            <tr style="height:64px; padding:0px;" v-for="row in map">
                 <td v-for="col in row"
                     style="border:1px solid black; width:64px; height:64px; max-width:64px; max-height:64px; "
                     :style="{ 'background-color': terrainColors[col.terrain.type] }">
@@ -40,13 +40,13 @@
         mounted() {
 
             mapApi.getMap(this.gameId).then((response) => {
-                this.setGame(response.data);
+                this.setMap(response.data);
             });
 
 
             window.Echo.private(`game_id{$game_id}`).listen('NextTurn', (e) => {
                 mapApi.getMap(this.gameId).then((response) => {
-                    this.setGame(response.data);
+                    this.setMap(response.data);
                 });
             });
 
@@ -64,12 +64,12 @@
         },
         computed: {
             ...mapGetters({
-                game: 'map/getMap'
+                map: 'map/getMap'
             }),
         },
         methods: {
             ...mapActions({
-                setGame: 'map/setMap'
+                setMap: 'map/setMap'
             })
         }
 

@@ -17,16 +17,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => '{game}'], function() {
+Route::group(['middleware' => 'auth:web'], function () {
 
-    Route::get('overview', 'MapController@overview')->name('map.overview');
-//    Route::get('update-map', 'MapController@map')->name('map.map');
-    Route::get('play', 'PlayerController@play')->name('player.play');
-    Route::get('update-map', 'PlayerController@getUpdate')->name('player.update');
-    Route::get('get-player', 'PlayerController@getPlayer')->name('player.player');
+    Route::get('/home', 'HomeController@index')->name('home');
 
+    Route::group(['prefix' => '{game}'], function () {
+
+        Route::get('overview', 'MapController@overview')->name('map.overview');
+        Route::get('play', 'PlayerController@play')->name('player.play');
+        Route::get('actions', 'ActionController@index')->name('actions.index');
+        Route::get('update-map', 'PlayerController@getUpdate')->name('player.update');
+        Route::get('get-player', 'PlayerController@getPlayer')->name('player.player');
+        Route::post('move', 'PlayerController@move')->name('player.move');
+
+
+    });
 
 });
 

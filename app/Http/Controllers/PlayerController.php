@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GameTick;
 use App\Game;
 use App\Player;
 use Illuminate\Http\Request;
@@ -16,15 +17,12 @@ class PlayerController extends Controller
         return view('player.play')->withPlayer($player)->withGameId($game->id);
     }
 
-    public function move(Game $game)
+    public function move(Request $request, Game $game)
     {
+        $player = $this->getPlayer($game);
+        $action = $player->move($game, $request->direction);
 
-        $player = Auth::user()->player;
-
-        $game = $player->games()->where('game_id', $game->id)->first() ?: abort(404);
-
-        // TODO
-
+        return ['status' => 'success', 'action' => $action];
     }
 
     public function getPlayer(Game $game)

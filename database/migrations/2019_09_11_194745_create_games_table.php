@@ -20,6 +20,7 @@ class CreateGamesTable extends Migration
             $table->string('password');
             $table->tinyInteger('status')->default(\App\Enums\GameStatus::LOBBY);
             $table->integer('max_players')->default(10);
+            $table->unsignedBigInteger('current_turn')->default(0);
             $table->timestamps();
             $table->foreign('map_id')->references('id')->on('maps');
         });

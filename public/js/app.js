@@ -1838,6 +1838,14 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _api_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/player */ "./resources/js/api/player.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1857,25 +1865,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
   data: function data() {
     return {};
   },
-  methods: {// Move
-    // Stance
-    // Shoot
-    // Pickup
-    // End Turn
-  }
+  methods: _objectSpread({
+    // Move
+    move: function move(direction) {
+      var _this = this;
+
+      _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].move(direction).then(function (response) {
+        _this.addAction(response.data.action);
+      });
+    }
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+    addAction: 'action/addAction'
+  }))
 });
 
 /***/ }),
@@ -1956,6 +1964,32 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ItemsComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ItemsComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    console.log('Component mounted.');
+  },
+  props: ['items']
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MapOverviewComponent.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MapOverviewComponent.vue?vue&type=script&lang=js& ***!
@@ -2013,11 +2047,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this = this;
 
     _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
-      _this.setGame(response.data);
+      _this.setMap(response.data);
     });
     window.Echo["private"]("game_id{$game_id}").listen('NextTurn', function (e) {
       _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(_this.gameId).then(function (response) {
-        _this.setGame(response.data);
+        _this.setMap(response.data);
       });
     });
   },
@@ -2028,10 +2062,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
-    game: 'map/getMap'
+    map: 'map/getMap'
   })),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    setGame: 'map/setMap'
+    setMap: 'map/setMap'
   }))
 });
 
@@ -2048,6 +2082,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _api_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/player */ "./resources/js/api/player.js");
+/* harmony import */ var _api_action__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api/action */ "./resources/js/api/action.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2157,6 +2192,58 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2166,24 +2253,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
       _this.setPlayer(response.data);
     });
+    _api_action__WEBPACK_IMPORTED_MODULE_2__["default"].getActions().then(function (response) {
+      _this.setActions(response.data);
+    });
     window.Echo["private"]("game_id{$game_id}").listen('NewMessage', function (e) {// New Log
     });
   },
-  props: ['player'],
   data: function data() {
     return {
       state: 0,
       // Lobby, Playing, Dead, Ended
       states: ['Standing', 'Crawling'],
-      actions: [],
       stats: []
     };
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    setPlayer: 'player/setPlayer'
+    setPlayer: 'player/setPlayer',
+    setActions: 'action/setActions'
   })),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
-    player: 'player/getPlayer'
+    player: 'player/getPlayer',
+    actions: 'action/getActions',
+    map: 'map/getMap',
+    items: 'map/getItems'
   }))
 });
 
@@ -47755,42 +47847,117 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-12" }, [
-          _vm._v("\n            Center of zone is [CENTER]\n        ")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "row py-2" }, [
-        _c("div", { staticClass: "col-md-12" }, [
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("N")]),
-          _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("NE")]),
-          _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("E")]),
-          _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("SE")]),
-          _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("S")]),
-          _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("SW")]),
-          _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("W")]),
-          _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("NW")])
-        ])
+  return _c("div", [
+    _c("div", { staticClass: "row py-2" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("N")
+              }
+            }
+          },
+          [_vm._v("N")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("NE")
+              }
+            }
+          },
+          [_vm._v("NE")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("E")
+              }
+            }
+          },
+          [_vm._v("E")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("SE")
+              }
+            }
+          },
+          [_vm._v("SE")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("S")
+              }
+            }
+          },
+          [_vm._v("S")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("SW")
+              }
+            }
+          },
+          [_vm._v("SW")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("W")
+              }
+            }
+          },
+          [_vm._v("W")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: {
+              click: function($event) {
+                return _vm.move("NW")
+              }
+            }
+          },
+          [_vm._v("NW")]
+        )
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -47930,6 +48097,36 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ItemsComponent.vue?vue&type=template&id=bf42bc70&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ItemsComponent.vue?vue&type=template&id=bf42bc70& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.items, function(item) {
+      return _c("p", [_vm._v("\n        " + _vm._s(item.id) + "\n    ")])
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MapOverviewComponent.vue?vue&type=template&id=68875b1a&":
 /*!***********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MapOverviewComponent.vue?vue&type=template&id=68875b1a& ***!
@@ -47959,7 +48156,7 @@ var render = function() {
           "table-layout": "fixed"
         }
       },
-      _vm._l(_vm.game, function(row) {
+      _vm._l(_vm.map, function(row) {
         return _c(
           "tr",
           { staticStyle: { height: "64px", padding: "0px" } },
@@ -48084,95 +48281,188 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-6" }, [_c("map-overview-component")], 1),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-12" }, [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _vm._v(
-                  "\n                            Movement\n                        "
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [_c("controls-component")],
-                1
-              )
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row py-2" }, [
-          _c("div", { staticClass: "col-md-12" }, [
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _vm._v(
-                  "\n                            Stats\n                        "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-body" }, [
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-2" }, [
-                    _vm._v(
-                      "\n                                    Health\n                                "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-4" }, [
-                    _vm._v(
-                      "\n                                    " +
-                        _vm._s(_vm.player.pivot.health) +
-                        "\n                                "
-                    )
-                  ])
-                ]),
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", [
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-md-6" },
+                  [_c("map-overview-component")],
+                  1
+                ),
                 _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-2" }, [
-                    _vm._v(
-                      "\n                                    Stamina\n                                "
-                    )
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-header" }, [
+                          _vm._v(
+                            "\n                                                Movement - " +
+                              _vm._s(_vm.player.pivot.x) +
+                              " , " +
+                              _vm._s(_vm.player.pivot.y) +
+                              "\n                                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "card-body" },
+                          [_vm._m(1), _vm._v(" "), _c("controls-component")],
+                          1
+                        )
+                      ])
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-md-4" }, [
-                    _vm._v(
-                      "\n                                    " +
-                        _vm._s(_vm.player.pivot.stamina) +
-                        "\n                                "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-2" }, [
-                    _vm._v(
-                      "\n                                    Stance\n                                "
-                    )
+                  _c("div", { staticClass: "row py-2" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-header" }, [
+                          _vm._v(
+                            "\n                                                Shoot\n                                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "card-body" },
+                          [_vm._m(2), _vm._v(" "), _c("controls-component")],
+                          1
+                        )
+                      ])
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-md-4" }, [
-                    _vm._v(
-                      "\n                                    " +
-                        _vm._s(_vm.states[_vm.player.pivot.state]) +
-                        "\n                                "
-                    )
+                  _c("div", { staticClass: "row py-2" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _vm.player.pivot !== undefined
+                        ? _c("div", { staticClass: "card" }, [
+                            _c("div", { staticClass: "card-header" }, [
+                              _vm._v(
+                                "\n                                                Stats\n                                            "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "card-body" }, [
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-md-4" }, [
+                                  _vm._v(
+                                    "\n                                                        Health\n                                                    "
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(_vm.player.pivot.health) +
+                                      "\n                                                    "
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-md-4" }, [
+                                  _vm._v(
+                                    "\n                                                        Stamina\n                                                    "
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(_vm.player.pivot.stamina) +
+                                      "\n                                                    "
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-md-4" }, [
+                                  _vm._v(
+                                    "\n                                                        Stance\n                                                    "
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(
+                                        _vm.states[_vm.player.pivot.state]
+                                      ) +
+                                      "\n                                                    "
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _vm._m(3)
+                            ])
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row py-2" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-header" }, [
+                          _vm._v(
+                            "\n                                                World\n                                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "card-body" },
+                          [
+                            _c("items-component", {
+                              attrs: { items: _vm.items }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row py-2" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-header" }, [
+                          _vm._v(
+                            "\n                                                Actions\n                                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "card-body" },
+                          _vm._l(_vm.actions, function(action) {
+                            return _c("p", [
+                              _vm._v(
+                                _vm._s(action.action) +
+                                  " - " +
+                                  _vm._s(action.data) +
+                                  " "
+                              )
+                            ])
+                          }),
+                          0
+                        )
+                      ])
+                    ])
                   ])
                 ])
               ])
             ])
           ])
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._m(1)
+        ])
       ])
     ])
   ])
@@ -48182,17 +48472,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row py-2" }, [
+    return _c("div", { staticClass: "card-header" }, [
+      _vm._v("Play  - "),
+      _c("button", { staticClass: "btn btn-success" }, [_vm._v("End Turn")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v(
-              "\n                            World\n                        "
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" })
-        ])
+        _vm._v(
+          "\n                                                        Center of zone is [CENTER]\n                                                    "
+        )
       ])
     ])
   },
@@ -48200,17 +48493,29 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row py-2" }, [
+    return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v(
-              "\n                            Actions\n                        "
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" })
-        ])
+        _vm._v(
+          "\n                                                        Your current [weapon] shoots [2] squares\n                                                    "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-4" }, [
+        _vm._v(
+          "\n                                                        Weapon\n                                                    "
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-6" }, [
+        _vm._v(
+          "\n                                                        Fists\n                                                    "
+        )
       ])
     ])
   }
@@ -61399,6 +61704,7 @@ var map = {
 	"./components/ControlsComponent.vue": "./resources/js/components/ControlsComponent.vue",
 	"./components/ExampleComponent.vue": "./resources/js/components/ExampleComponent.vue",
 	"./components/GameComponent.vue": "./resources/js/components/GameComponent.vue",
+	"./components/ItemsComponent.vue": "./resources/js/components/ItemsComponent.vue",
 	"./components/MapOverviewComponent.vue": "./resources/js/components/MapOverviewComponent.vue",
 	"./components/PlayComponent.vue": "./resources/js/components/PlayComponent.vue"
 };
@@ -61422,6 +61728,23 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "./resources/js sync recursive \\.vue$/";
+
+/***/ }),
+
+/***/ "./resources/js/api/action.js":
+/*!************************************!*\
+  !*** ./resources/js/api/action.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  getActions: function getActions() {
+    return window.axios.get('actions');
+  }
+});
 
 /***/ }),
 
@@ -61454,6 +61777,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   getPlayer: function getPlayer() {
     return window.axios.get("get-player");
+  },
+  move: function move(direction) {
+    return window.axios.post('move', {
+      direction: direction
+    });
   }
 });
 
@@ -61781,6 +62109,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ItemsComponent.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/ItemsComponent.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ItemsComponent_vue_vue_type_template_id_bf42bc70___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ItemsComponent.vue?vue&type=template&id=bf42bc70& */ "./resources/js/components/ItemsComponent.vue?vue&type=template&id=bf42bc70&");
+/* harmony import */ var _ItemsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ItemsComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ItemsComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ItemsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ItemsComponent_vue_vue_type_template_id_bf42bc70___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ItemsComponent_vue_vue_type_template_id_bf42bc70___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ItemsComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ItemsComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/ItemsComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ItemsComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ItemsComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ItemsComponent.vue?vue&type=template&id=bf42bc70&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/ItemsComponent.vue?vue&type=template&id=bf42bc70& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemsComponent_vue_vue_type_template_id_bf42bc70___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ItemsComponent.vue?vue&type=template&id=bf42bc70& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ItemsComponent.vue?vue&type=template&id=bf42bc70&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemsComponent_vue_vue_type_template_id_bf42bc70___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemsComponent_vue_vue_type_template_id_bf42bc70___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/MapOverviewComponent.vue":
 /*!**********************************************************!*\
   !*** ./resources/js/components/MapOverviewComponent.vue ***!
@@ -61934,9 +62331,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_Map__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/Map */ "./resources/js/store/modules/Map.js");
 /* harmony import */ var _modules_Game__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/Game */ "./resources/js/store/modules/Game.js");
 /* harmony import */ var _modules_Player__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/Player */ "./resources/js/store/modules/Player.js");
+/* harmony import */ var _modules_Action__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/Action */ "./resources/js/store/modules/Action.js");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
 
 
 
@@ -61944,9 +62343,65 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
   modules: {
     map: _modules_Map__WEBPACK_IMPORTED_MODULE_2__["default"],
     game: _modules_Game__WEBPACK_IMPORTED_MODULE_3__["default"],
-    player: _modules_Player__WEBPACK_IMPORTED_MODULE_4__["default"]
+    player: _modules_Player__WEBPACK_IMPORTED_MODULE_4__["default"],
+    action: _modules_Action__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/Action.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store/modules/Action.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var state = {
+  actions: []
+};
+var getters = {
+  getActions: function getActions(state) {
+    return state.actions;
+  }
+};
+var actions = {
+  setActions: function setActions(_ref, actions) {
+    var commit = _ref.commit;
+    commit('setActions', actions);
+  },
+  addAction: function addAction(_ref2, action) {
+    var commit = _ref2.commit;
+    commit('addAction', action);
+  },
+  removeAction: function removeAction(_ref3, action) {
+    var commit = _ref3.commit;
+    commit('removeAction', action);
+  }
+};
+var mutations = {
+  setActions: function setActions(state, actions) {
+    state.actions = actions;
+  },
+  addAction: function addAction(state, action) {
+    state.actions.push(action);
+  },
+  removeAction: function removeAction(state, action) {
+    // state.actions.split(state.action.indexOf(action), 1)
+    state.actions = state.actions.filter(function (a) {
+      return action.id !== a.id;
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  getters: getters,
+  state: state,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 
@@ -62010,6 +62465,11 @@ var state = {
 var getters = {
   getMap: function getMap(state) {
     return state.map;
+  },
+  getItems: function getItems(state) {
+    return state.map.filter(function (col) {
+      console.log(col);
+    });
   }
 };
 var mutations = {
@@ -62043,7 +62503,7 @@ var actions = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var state = {
-  player: []
+  player: {}
 };
 var getters = {
   getPlayer: function getPlayer(state) {

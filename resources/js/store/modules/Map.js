@@ -5,6 +5,11 @@ const state = {
 const getters = {
     getMap(state) {
         return state.map;
+    },
+    getItems(state) {
+        return state.map.filter(function (col) {
+            console.log(col);
+        })
     }
 };
 
