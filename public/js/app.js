@@ -1855,6 +1855,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
   data: function data() {
@@ -1988,6 +1998,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1997,9 +2015,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
       _this.setGame(response.data);
     });
-    window.Echo["private"]("game_id{$game_id}").listen('NextTurn', function (e) {// Refresh map
-    });
-    window.Echo["private"]("game_id{$game_id}").listen('NewMessage', function (e) {// New Log
+    window.Echo["private"]("game_id{$game_id}").listen('NextTurn', function (e) {
+      _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(_this.gameId).then(function (response) {
+        _this.setGame(response.data);
+      });
     });
   },
   props: ['gameId'],
@@ -2027,6 +2046,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _api_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/player */ "./resources/js/api/player.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2058,21 +2085,106 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    var _this = this;
+
+    _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
+      _this.setPlayer(response.data);
+    });
+    window.Echo["private"]("game_id{$game_id}").listen('NewMessage', function (e) {// New Log
+    });
+  },
   props: ['player'],
   data: function data() {
     return {
-      state: 0 // Lobby, Playing, Dead, Ended
-
+      state: 0,
+      // Lobby, Playing, Dead, Ended
+      states: ['Standing', 'Crawling'],
+      actions: [],
+      stats: []
     };
   },
-  methods: {// Move
-    // Stance
-    // Shoot
-    // Pickup
-    // End Turn
-  }
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+    setPlayer: 'player/setPlayer'
+  })),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    player: 'player/getPlayer'
+  }))
 });
 
 /***/ }),
@@ -47651,21 +47763,31 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("button", [_vm._v("N")]),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-12" }, [
+          _vm._v("\n            Center of zone is [CENTER]\n        ")
+        ])
+      ]),
       _vm._v(" "),
-      _c("button", [_vm._v("NE")]),
-      _vm._v(" "),
-      _c("button", [_vm._v("E")]),
-      _vm._v(" "),
-      _c("button", [_vm._v("SE")]),
-      _vm._v(" "),
-      _c("button", [_vm._v("S")]),
-      _vm._v(" "),
-      _c("button", [_vm._v("SW")]),
-      _vm._v(" "),
-      _c("button", [_vm._v("W")]),
-      _vm._v(" "),
-      _c("button", [_vm._v("NW")])
+      _c("div", { staticClass: "row py-2" }, [
+        _c("div", { staticClass: "col-md-12" }, [
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("N")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("NE")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("E")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("SE")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("S")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("SW")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("W")]),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("NW")])
+        ])
+      ])
     ])
   }
 ]
@@ -47823,69 +47945,42 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "table",
-    {
-      staticStyle: {
-        border: "0px",
-        "border-spacing": "0",
-        "border-collapse": "collapse",
-        "overflow-x": "scroll",
-        "table-layout": "fixed"
-      }
-    },
-    _vm._l(_vm.game, function(row) {
-      return _c(
-        "tr",
-        { staticStyle: { height: "64px", padding: "0px" } },
-        _vm._l(row, function(col) {
-          return _c(
-            "td",
-            {
-              staticStyle: {
-                border: "1px solid black",
-                width: "64px",
-                height: "64px",
-                "max-width": "64px",
-                "max-height": "64px"
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c(
+      "table",
+      {
+        staticStyle: {
+          border: "0px",
+          "border-spacing": "0",
+          "border-collapse": "collapse",
+          "overflow-x": "scroll",
+          "table-layout": "fixed"
+        }
+      },
+      _vm._l(_vm.game, function(row) {
+        return _c(
+          "tr",
+          { staticStyle: { height: "64px", padding: "0px" } },
+          _vm._l(row, function(col) {
+            return _c(
+              "td",
+              {
+                staticStyle: {
+                  border: "1px solid black",
+                  width: "64px",
+                  height: "64px",
+                  "max-width": "64px",
+                  "max-height": "64px"
+                },
+                style: {
+                  "background-color": _vm.terrainColors[col.terrain.type]
+                }
               },
-              style: { "background-color": _vm.terrainColors[col.terrain.type] }
-            },
-            [
-              _vm._l(col.players, function(player) {
-                return _c("p", [
-                  _c(
-                    "svg",
-                    {
-                      attrs: {
-                        viewBox: "0 0 25 25",
-                        xmlns: "http://www.w3.org/2000/svg"
-                      }
-                    },
-                    [
-                      _c("circle", {
-                        attrs: { cx: "12.5", cy: "12.5", r: "10" }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "text",
-                        {
-                          attrs: {
-                            x: "9",
-                            y: "17",
-                            fill: "red",
-                            "font-family": "monospace"
-                          }
-                        },
-                        [_vm._v(_vm._s(player.username[0]))]
-                      )
-                    ]
-                  )
-                ])
-              }),
-              _vm._v(" "),
-              col.items && col.items.length > 0
-                ? _c("p", [
+              [
+                _vm._l(col.players, function(player) {
+                  return _c("p", [
                     _c(
                       "svg",
                       {
@@ -47895,7 +47990,9 @@ var render = function() {
                         }
                       },
                       [
-                        _c("rect", { attrs: { width: "25", height: "25" } }),
+                        _c("circle", {
+                          attrs: { cx: "12.5", cy: "12.5", r: "10" }
+                        }),
                         _vm._v(" "),
                         _c(
                           "text",
@@ -47907,23 +48004,65 @@ var render = function() {
                               "font-family": "monospace"
                             }
                           },
-                          [_vm._v(_vm._s(col.items.length))]
+                          [_vm._v(_vm._s(player.username[0]))]
                         )
                       ]
                     )
                   ])
-                : _vm._e()
-            ],
-            2
-          )
-        }),
-        0
-      )
-    }),
-    0
-  )
+                }),
+                _vm._v(" "),
+                col.items && col.items.length > 0
+                  ? _c("p", [
+                      _c(
+                        "svg",
+                        {
+                          attrs: {
+                            viewBox: "0 0 25 25",
+                            xmlns: "http://www.w3.org/2000/svg"
+                          }
+                        },
+                        [
+                          _c("rect", { attrs: { width: "25", height: "25" } }),
+                          _vm._v(" "),
+                          _c(
+                            "text",
+                            {
+                              attrs: {
+                                x: "9",
+                                y: "17",
+                                fill: "red",
+                                "font-family": "monospace"
+                              }
+                            },
+                            [_vm._v(_vm._s(col.items.length))]
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e()
+              ],
+              2
+            )
+          }),
+          0
+        )
+      }),
+      0
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-6 offset-md-3" }, [
+        _vm._v("\n            North is this way\n        ")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -47947,13 +48086,135 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-8" }, [_c("map-overview-component")], 1),
+      _c("div", { staticClass: "col-md-6" }, [_c("map-overview-component")], 1),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-4" }, [_c("controls-component")], 1)
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-header" }, [
+                _vm._v(
+                  "\n                            Movement\n                        "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [_c("controls-component")],
+                1
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row py-2" }, [
+          _c("div", { staticClass: "col-md-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-header" }, [
+                _vm._v(
+                  "\n                            Stats\n                        "
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-2" }, [
+                    _vm._v(
+                      "\n                                    Health\n                                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-4" }, [
+                    _vm._v(
+                      "\n                                    " +
+                        _vm._s(_vm.player.pivot.health) +
+                        "\n                                "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-2" }, [
+                    _vm._v(
+                      "\n                                    Stamina\n                                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-4" }, [
+                    _vm._v(
+                      "\n                                    " +
+                        _vm._s(_vm.player.pivot.stamina) +
+                        "\n                                "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-2" }, [
+                    _vm._v(
+                      "\n                                    Stance\n                                "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-4" }, [
+                    _vm._v(
+                      "\n                                    " +
+                        _vm._s(_vm.states[_vm.player.pivot.state]) +
+                        "\n                                "
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._m(1)
+      ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row py-2" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v(
+              "\n                            World\n                        "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row py-2" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v(
+              "\n                            Actions\n                        "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" })
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -61181,6 +61442,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/api/player.js":
+/*!************************************!*\
+  !*** ./resources/js/api/player.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  getPlayer: function getPlayer() {
+    return window.axios.get("get-player");
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -61655,15 +61933,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_Map__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/Map */ "./resources/js/store/modules/Map.js");
 /* harmony import */ var _modules_Game__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/Game */ "./resources/js/store/modules/Game.js");
+/* harmony import */ var _modules_Player__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/Player */ "./resources/js/store/modules/Player.js");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     map: _modules_Map__WEBPACK_IMPORTED_MODULE_2__["default"],
-    game: _modules_Game__WEBPACK_IMPORTED_MODULE_3__["default"]
+    game: _modules_Game__WEBPACK_IMPORTED_MODULE_3__["default"],
+    player: _modules_Player__WEBPACK_IMPORTED_MODULE_4__["default"]
   }
 }));
 
@@ -61746,6 +62027,44 @@ var actions = {
   namespaced: true,
   state: state,
   getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/Player.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store/modules/Player.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var state = {
+  player: []
+};
+var getters = {
+  getPlayer: function getPlayer(state) {
+    return state.player;
+  }
+};
+var actions = {
+  setPlayer: function setPlayer(_ref, player) {
+    var commit = _ref.commit;
+    commit('setPlayer', player);
+  }
+};
+var mutations = {
+  setPlayer: function setPlayer(state, player) {
+    state.player = player;
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  getters: getters,
+  state: state,
   actions: actions,
   mutations: mutations
 });

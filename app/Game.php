@@ -35,17 +35,21 @@ class Game extends Model
             $items = $this->items;
         } else {
 
-            $max_x = $x + 4;
-            $max_y = $y + 4;
+            $max_x = $x + 3;
+            $max_y = $y + 3;
+
+            $min_x = $x - 3;
+            $min_y = $y - 3;
 
             $terrains = $map->terrain()
-                ->where('x', '>=', $x)->where('x', '<=', $max_x)
-                ->where('y', '>=', $y)->where('y', '<=', $max_y)->get();
+                ->where('x', '>=', $min_x)->where('x', '<=', $max_x)
+                ->where('y', '>=', $min_y)->where('y', '<=', $max_y)->get();
 
-            $players = $this->players()->where('x', '>=', $x)->where('x', '<=', $max_x)
-                ->where('y', '>=', $y)->where('y', '<=', $max_y)->get();
-            $items = $this->items()->where('x', '>=', $x)->where('x', '<=', $max_x)
-                ->where('y', '>=', $y)->where('y', '<=', $max_y)->get();;
+            $players = $this->players()->where('x', '>=', $min_x)->where('x', '<=', $max_x)
+                ->where('y', '>=', $min_y)->where('y', '<=', $max_y)->get();
+
+            $items = $this->items()->where('x', '>=', $min_x)->where('x', '<=', $max_x)
+                ->where('y', '>=', $min_y)->where('y', '<=', $max_y)->get();;
 
         }
 
@@ -63,8 +67,6 @@ class Game extends Model
         foreach ($items as $item) {
             $data[$item->pivot->y][$item->pivot->x]['items'][] = $item;
         }
-
-
 
 
         return $data;

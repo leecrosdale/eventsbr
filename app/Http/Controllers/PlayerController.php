@@ -23,11 +23,18 @@ class PlayerController extends Controller
 
         $game = $player->games()->where('game_id', $game->id)->first() ?: abort(404);
 
-
-
+        // TODO
 
     }
 
+    public function getPlayer(Game $game)
+    {
+        $player = Auth::user()->player;
+
+        $game = $player->games()->where('game_id', $game->id)->first() ?: abort(404);
+
+        return $game->players()->where('player_id', $player->id)->first();
+    }
 
     public function getUpdate(Game $game)
     {
@@ -54,6 +61,5 @@ class PlayerController extends Controller
     {
         // You got shot by {x}
     }
-
 
 }

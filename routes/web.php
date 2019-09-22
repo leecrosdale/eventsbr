@@ -25,6 +25,7 @@ Route::group(['prefix' => '{game}'], function() {
 //    Route::get('update-map', 'MapController@map')->name('map.map');
     Route::get('play', 'PlayerController@play')->name('player.play');
     Route::get('update-map', 'PlayerController@getUpdate')->name('player.update');
+    Route::get('get-player', 'PlayerController@getPlayer')->name('player.player');
 
 
 });
