@@ -31,8 +31,8 @@
                             <!-- Play -->
                             <div class="row" v-else-if="player.pivot !== undefined && game.status === 1">
                                 <div class="col-md-6">
-                                    <map-overview-component></map-overview-component>
-<!--                                    <canvas-map-component></canvas-map-component>-->
+<!--                                    <map-overview-component></map-overview-component>-->
+                                    <canvas-map-component></canvas-map-component>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">

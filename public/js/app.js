@@ -1838,6 +1838,14 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _api_map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/map */ "./resources/js/api/map.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1845,6 +1853,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1852,8 +1863,12 @@ __webpack_require__.r(__webpack_exports__);
       // so child components will update when `context` changes.
       provider: {
         // This is the CanvasRenderingContext that children will draw to.
-        context: null
-      }
+        context: null,
+        tileW: 64,
+        tileH: 64
+      },
+      terrainColors: ['#228B22', '#808000', '#7CFC00', '#00BFFF'],
+      renderingStatus: 'Not Rendering'
     };
   },
   // Allows any child component to `inject: ['provider']` and have access to it.
@@ -1863,34 +1878,87 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    // We can't access the rendering context until the canvas is mounted to the DOM.
-    // Once we have it, provide it to all child components.
-    this.provider.context = this.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
-    // Normally you'd use a more flexible resize system.
+    var _this = this;
 
-    this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
-    this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
-    this.render();
+    _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
+      _this.setMap(response.data); // We can't access the rendering context until the canvas is mounted to the DOM.
+      // Once we have it, provide it to all child components.
+
+
+      _this.provider.context = _this.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
+      // Normally you'd use a more flexible resize system.
+
+      _this.$refs['map-canvas'].width = _this.$refs['map-canvas'].parentElement.clientWidth;
+      _this.$refs['map-canvas'].height = _this.$refs['map-canvas'].parentElement.clientHeight;
+
+      _this.render();
+    });
   },
-  methods: {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+    setMap: 'map/setMap'
+  }), {
     render: function render() {
       // Since the parent canvas has to mount first, it's *possible* that the context may not be
       // injected by the time this render function runs the first time.
-      console.log("render");
       if (!this.provider.context) return;
       var ctx = this.provider.context;
-      console.log(ctx);
-      ctx.beginPath(); // Draw the new rectangle.
+      this.renderingStatus = 'Rendering';
+      var yCount = 0;
+      var xCount = 0;
 
-      ctx.rect(0, 0, 100, 100);
-      ctx.fillStyle = '#f11f41';
-      ctx.fill(); // // Draw the text
-      // ctx.fillStyle = '#000'
-      // ctx.font = '28px sans-serif';
-      // ctx.textAlign = 'center';
-      // ctx.fillText(Math.floor(this.value), (newBox.x + (newBox.w / 2)), newBox.y - 14)
+      for (var y in this.map) {
+        xCount = 0;
+        var row = this.map[y];
+
+        for (var x in row) {
+          var col = this.map[y][x]; // ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+          ctx.fillStyle = this.terrainColors[col.terrain.type];
+          ctx.fillRect(xCount * this.provider.tileW, yCount * this.provider.tileH, this.provider.tileW, this.provider.tileH);
+          ctx.fillStyle = '#000000';
+          ctx.fillText(x + ',' + y, xCount * this.provider.tileW + 5, yCount * this.provider.tileH + 10);
+
+          if (col.players !== undefined) {
+            for (var p in col.players) {
+              var player = col.players[p];
+              ctx.beginPath();
+              ctx.arc(xCount * this.provider.tileW + this.provider.tileW / 2, yCount * this.provider.tileH + this.provider.tileH / 2, 10, 0, 2 * Math.PI, false);
+              ctx.fillStyle = 'green';
+              ctx.fill();
+              ctx.lineWidth = 5;
+              ctx.strokeStyle = '#003300';
+              ctx.stroke();
+            }
+          }
+
+          if (col.items !== undefined) {
+            for (var i in col.items) {
+              var item = col.items[i];
+              ctx.beginPath();
+              ctx.rect(xCount * this.provider.tileW + this.provider.tileW / 2, yCount * this.provider.tileH + this.provider.tileH / 2, this.provider.tileW / 4, this.provider.tileH / 4);
+              ctx.fillStyle = 'blue';
+              ctx.fill();
+              ctx.lineWidth = 5;
+              ctx.strokeStyle = '#003300';
+              ctx.stroke();
+            }
+          }
+
+          this.renderingStatus = 'Rendered ' + xCount + ',' + yCount;
+          xCount++;
+        }
+
+        yCount++;
+      }
+
+      console.log(yCount);
+      console.log(xCount);
+      this.renderingStatus = 'Rendering Complete';
     }
-  }
+  }),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    map: 'map/getMap'
+  }))
 }); //
 // var bw = 400;
 // var bh = 400;
@@ -47966,10 +48034,11 @@ var render = function() {
     "div",
     { staticClass: "my-canvas-wrapper" },
     [
+      _vm._v("\n    Status: " + _vm._s(_vm.renderingStatus) + "\n    "),
       _c("canvas", {
         ref: "map-canvas",
-        staticStyle: { background: "#fff", margin: "20px" },
-        attrs: { width: "420px", height: "420px" }
+        staticStyle: { background: "#000" },
+        attrs: { width: "448px", height: "448px" }
       }),
       _vm._v(" "),
       _vm._t("default")
@@ -48470,7 +48539,7 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "col-md-6" },
-                      [_c("map-overview-component")],
+                      [_c("canvas-map-component")],
                       1
                     ),
                     _vm._v(" "),

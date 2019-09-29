@@ -1,11 +1,16 @@
 <template>
     <div class="my-canvas-wrapper">
-        <canvas ref="map-canvas" width="420px" height="420px" style="background: #fff; margin:20px;"></canvas>
+        Status: {{ renderingStatus }}
+        <canvas ref="map-canvas" width="448px" height="448px" style="background: #000;"></canvas>
         <slot></slot>
     </div>
 </template>
 
 <script>
+
+    import {mapGetters, mapActions} from 'vuex'
+    import mapApi from '../api/map'
+
     export default {
         data() {
             return {
@@ -13,8 +18,17 @@
                 // so child components will update when `context` changes.
                 provider: {
                     // This is the CanvasRenderingContext that children will draw to.
-                    context: null
-                }
+                    context: null,
+                    tileW: 64,
+                    tileH: 64,
+                },
+                terrainColors: [
+                    '#228B22',
+                    '#808000',
+                    '#7CFC00',
+                    '#00BFFF'
+                ],
+                renderingStatus: 'Not Rendering'
             }
         },
 
@@ -26,42 +40,118 @@
         },
 
         mounted() {
-            // We can't access the rendering context until the canvas is mounted to the DOM.
-            // Once we have it, provide it to all child components.
-            this.provider.context = this.$refs['map-canvas'].getContext('2d');
+            mapApi.getMap(this.gameId).then((response) => {
+                this.setMap(response.data);
 
-            // Resize the canvas to fit its parent's width.
-            // Normally you'd use a more flexible resize system.
-            this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
-            this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
-            this.render();
+                // We can't access the rendering context until the canvas is mounted to the DOM.
+                // Once we have it, provide it to all child components.
+                this.provider.context = this.$refs['map-canvas'].getContext('2d');
+
+                // Resize the canvas to fit its parent's width.
+                // Normally you'd use a more flexible resize system.
+                this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+                this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
+
+
+                this.render();
+            });
+
 
         },
         methods: {
 
-            render () {
+            ...mapActions({
+                setMap: 'map/setMap'
+            }),
+
+            render() {
                 // Since the parent canvas has to mount first, it's *possible* that the context may not be
                 // injected by the time this render function runs the first time.
-                console.log("render");
-                if(!this.provider.context) return;
+                if (!this.provider.context) return;
                 const ctx = this.provider.context;
-                console.log(ctx);
 
 
-                ctx.beginPath();
+                this.renderingStatus = 'Rendering';
 
-                // Draw the new rectangle.
-                ctx.rect(0,0, 100, 100);
-                ctx.fillStyle = '#f11f41';
-                ctx.fill();
 
-                // // Draw the text
-                // ctx.fillStyle = '#000'
-                // ctx.font = '28px sans-serif';
-                // ctx.textAlign = 'center';
-                // ctx.fillText(Math.floor(this.value), (newBox.x + (newBox.w / 2)), newBox.y - 14)
+                let yCount = 0;
+                let xCount = 0;
+
+
+                for (let y in this.map) {
+
+                    xCount = 0;
+
+                    let row = this.map[y];
+
+                    for (let x in row) {
+
+                        let col = this.map[y][x];
+
+                        // ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+                        ctx.fillStyle = this.terrainColors[col.terrain.type];
+                        ctx.fillRect(xCount * this.provider.tileW, yCount * this.provider.tileH, this.provider.tileW, this.provider.tileH);
+                        ctx.fillStyle = '#000000';
+                        ctx.fillText(x + ',' + y, xCount * this.provider.tileW + 5, yCount * this.provider.tileH + 10);
+
+                        if (col.players !== undefined)
+                        {
+                            for (let p in col.players) {
+
+                                let player = col.players[p];
+
+                                ctx.beginPath();
+                                ctx.arc(xCount * this.provider.tileW + this.provider.tileW / 2 , yCount * this.provider.tileH + this.provider.tileH / 2, 10, 0, 2 * Math.PI, false);
+                                ctx.fillStyle = 'green';
+                                ctx.fill();
+                                ctx.lineWidth = 5;
+                                ctx.strokeStyle = '#003300';
+                                ctx.stroke();
+
+                            }
+                        }
+
+                        if (col.items !== undefined)
+                        {
+                            for (let i in col.items) {
+
+                                let item = col.items[i];
+
+                                ctx.beginPath();
+                                ctx.rect(
+                                    xCount * this.provider.tileW + this.provider.tileW / 2 ,
+                                    yCount * this.provider.tileH + this.provider.tileH / 2,
+                                    this.provider.tileW / 4,
+                                    this.provider.tileH / 4
+                                );
+                                ctx.fillStyle = 'blue';
+                                ctx.fill();
+                                ctx.lineWidth = 5;
+                                ctx.strokeStyle = '#003300';
+                                ctx.stroke();
+
+                            }
+                        }
+
+
+                        this.renderingStatus = 'Rendered ' + xCount + ',' + yCount;
+                        xCount++;
+                    }
+                    yCount++;
+                }
+
+                console.log(yCount);
+                console.log(xCount);
+
+                this.renderingStatus = 'Rendering Complete';
+
             }
 
+        },
+        computed: {
+            ...mapGetters({
+                map: 'map/getMap'
+            }),
         }
     }
     //
