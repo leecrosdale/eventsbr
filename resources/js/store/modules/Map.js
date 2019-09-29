@@ -7,9 +7,9 @@ const getters = {
         return state.map;
     },
     getItems(state) {
-        return state.map.filter(function (col) {
-            console.log(col);
-        })
+        // return state.map.filter(function (col) {
+        //     console.log(col);
+        // })
     }
 };
 

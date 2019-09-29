@@ -8,7 +8,7 @@ const getters = {
     getGame(state) {
         return state.game
     },
-    getId(state) {
+    getGameId(state) {
         return state.id
     }
 };
@@ -16,15 +16,18 @@ const getters = {
 const actions = {
     setGameId({commit}, id) {
         commit('setGameId', id);
+    },
+    setGame({commit}, game) {
+        commit('setGame', game);
     }
 };
 
 const mutations = {
-    setGame(game) {
-        this.game = game
+    setGame(state, game) {
+        state.game = game
     },
-    setGameId(id) {
-        this.id = id;
+    setGameId(state, id) {
+        state.id = id;
     }
 };
 

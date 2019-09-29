@@ -2,11 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\GameStatus;
+use App\Events\GameStarted;
 use App\Game;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
+
+    public function listGames()
+    {
+        return view('admin.game.index')->withGames(Game::all());
+    }
+
+    public function start(Game $game)
+    {
+        $game->status = GameStatus::RUNNING;
+        $game->save();
+        event(new GameStarted($game));
+        return redirect()->back();
+    }
+
+    public function data(Game $game)
+    {
+        return $game;
+    }
+
     /**
      * Display a listing of the resource.
      *

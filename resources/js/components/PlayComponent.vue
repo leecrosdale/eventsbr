@@ -4,19 +4,35 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Play  - <button class="btn btn-success">End Turn</button></div>
-
-                    <div class="card-body">
-
+                    <div class="card-header">Play -
+                        <button class="btn btn-success">End Turn</button>
+                    </div>
+                    <div class="card-body" >
                         <div>
-
                             <!-- Lobby -->
+                            <div class="row" v-if="game.status === 0">
+                                <div class="col-md-12">
+                                    Game is starting - 1/10 players joined
+                                </div>
+                            </div>
+
+                            <div class="row" v-else-if="game.status === 2">
+                                <div class="col-md-12">
+                                   You have been killed by {X}
+                                </div>
+                            </div>
+
+                            <div class="row" v-else-if="game.status === 3">
+                                <div class="col-md-12">
+                                   Game has ended - (Show leaderboard)
+                                </div>
+                            </div>
 
                             <!-- Play -->
-
-                            <div class="row">
+                            <div class="row" v-else-if="player.pivot !== undefined && game.status === 1">
                                 <div class="col-md-6">
                                     <map-overview-component></map-overview-component>
+<!--                                    <canvas-map-component></canvas-map-component>-->
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">
@@ -120,11 +136,8 @@
                                                     Actions
                                                 </div>
                                                 <div class="card-body">
-
                                                     <p v-for="action in actions">{{ action.action }} - {{ action.data
                                                         }} </p>
-
-
                                                 </div>
                                             </div>
                                         </div>
@@ -158,6 +171,7 @@
 
     import playerApi from '../api/player'
     import actionApi from '../api/action'
+    import gameApi from '../api/game'
 
 
     export default {
@@ -171,18 +185,20 @@
                 this.setActions(response.data);
             });
 
-            window.Echo.private(`game_id{$game_id}`).listen('NewMessage', (e) => {
-                // New Log
+            gameApi.getGame(this.gameId).then((response) => {
+                this.setGame(response.data);
             });
 
-
+        },
+        created() {
+            Echo.channel(`game`).listen('GameStarted', (e) => {
+               this.setGame(e.game);
+            });
         },
         data() {
             return {
-                state: 0, // Lobby, Playing, Dead, Ended
                 states: ['Standing', 'Crawling'],
                 stats: []
-
             }
         },
         methods: {
@@ -198,6 +214,7 @@
             // End Turn
 
             ...mapActions({
+                setGame: 'game/setGame',
                 setPlayer: 'player/setPlayer',
                 setActions: 'action/setActions'
             })
@@ -205,11 +222,16 @@
         },
         computed: {
             ...mapGetters({
+                gameId: 'game/getGameId',
+                game: 'game/getGame',
                 player: 'player/getPlayer',
                 actions: 'action/getActions',
                 map: 'map/getMap',
                 items: 'map/getItems'
             })
+        },
+        watch: {
+
         }
     }
 </script>

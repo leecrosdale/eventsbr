@@ -2,12 +2,12 @@
 
 namespace App;
 
+use App\Enums\GameStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    protected $with = ['players', 'items'];
-
+//    protected $with = ['players', 'items'];
 
     public function map()
     {
@@ -71,6 +71,11 @@ class Game extends Model
 
         return $data;
 
+    }
+
+    public function getStatusStringAttribute()
+    {
+        return GameStatus::STRINGS[$this->status];
     }
 
 }

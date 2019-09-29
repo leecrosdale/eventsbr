@@ -8,8 +8,14 @@ class GameStatus extends Enum
 {
 
     const LOBBY = 0;
-    const STARTING = 1;
-    const RUNNING = 2;
-    const ENDED = 3;
+    const RUNNING = 1;
+    const ENDED = 2;
+
+    const STRINGS = [
+        self::LOBBY => 'lobby',
+        self::RUNNING => 'running',
+        self::ENDED => 'ended',
+    ];
+
 
 }
