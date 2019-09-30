@@ -173,7 +173,6 @@
     import actionApi from '../api/action'
     import gameApi from '../api/game'
 
-
     export default {
         mounted() {
 
@@ -191,7 +190,7 @@
 
         },
         created() {
-            Echo.channel(`game`).listen('GameStarted', (e) => {
+            window.Echo.private(`game.${this.gameId}`).listen('GameStarted', (e) => {
                this.setGame(e.game);
             });
         },

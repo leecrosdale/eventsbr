@@ -18,7 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 
 
+
 Route::group(['middleware' => 'auth:web'], function () {
+
+    Broadcast::routes();
 
     Route::get('/home', 'HomeController@index')->name('home');
 

@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Log;
 
 class GameStarted implements ShouldBroadcast
 {
@@ -34,6 +35,6 @@ class GameStarted implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('game');
+        return new PrivateChannel("game.{$this->game->id}");
     }
 }

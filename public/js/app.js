@@ -1887,12 +1887,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       _this.provider.context = _this.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
       // Normally you'd use a more flexible resize system.
-
-      _this.$refs['map-canvas'].width = _this.$refs['map-canvas'].parentElement.clientWidth;
-      _this.$refs['map-canvas'].height = _this.$refs['map-canvas'].parentElement.clientHeight;
+      // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+      // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
 
       _this.render();
-    });
+    }); // Echo.channel(`game.${this.gameId}`).listen('NextTurn', (e) => {
+    //     this.setMap(e.map);
+    //     this.render();
+    // });
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setMap: 'map/setMap'
@@ -1912,35 +1914,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         for (var x in row) {
           var col = this.map[y][x]; // ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+          // this.drawText(ctx, '#000000', x + ',' + y, xCount * this.provider.tileW + 5, yCount * this.provider.tileH + 10);
 
-          ctx.fillStyle = this.terrainColors[col.terrain.type];
-          ctx.fillRect(xCount * this.provider.tileW, yCount * this.provider.tileH, this.provider.tileW, this.provider.tileH);
-          ctx.fillStyle = '#000000';
-          ctx.fillText(x + ',' + y, xCount * this.provider.tileW + 5, yCount * this.provider.tileH + 10);
+          this.drawRect(ctx, xCount * this.provider.tileW, yCount * this.provider.tileH, this.provider.tileW, this.provider.tileH, this.terrainColors[col.terrain.type], 1, '#000');
 
           if (col.players !== undefined) {
             for (var p in col.players) {
               var player = col.players[p];
-              ctx.beginPath();
-              ctx.arc(xCount * this.provider.tileW + this.provider.tileW / 2, yCount * this.provider.tileH + this.provider.tileH / 2, 10, 0, 2 * Math.PI, false);
-              ctx.fillStyle = 'green';
-              ctx.fill();
-              ctx.lineWidth = 5;
-              ctx.strokeStyle = '#003300';
-              ctx.stroke();
+              var xP = xCount * this.provider.tileW + this.provider.tileW / 2;
+              var yP = yCount * this.provider.tileH + this.provider.tileH / 2;
+              this.drawArc(ctx, xP, yP, 10);
+              this.drawText(ctx, '#000', player.username, xP - 30, yP + 25);
             }
           }
 
           if (col.items !== undefined) {
             for (var i in col.items) {
               var item = col.items[i];
-              ctx.beginPath();
-              ctx.rect(xCount * this.provider.tileW + this.provider.tileW / 2, yCount * this.provider.tileH + this.provider.tileH / 2, this.provider.tileW / 4, this.provider.tileH / 4);
-              ctx.fillStyle = 'blue';
-              ctx.fill();
-              ctx.lineWidth = 5;
-              ctx.strokeStyle = '#003300';
-              ctx.stroke();
+              var xI = xCount * this.provider.tileW + this.provider.tileW / 2;
+              var yI = yCount * this.provider.tileH + this.provider.tileH / 2;
+              var wI = this.provider.tileW / 4;
+              var hI = this.provider.tileH / 4;
+              this.drawRect(ctx, xI, yI, wI, hI, 'blue', 4, '#003300');
+              this.drawText(ctx, '#000', item.name, xI, yI + 28);
             }
           }
 
@@ -1951,9 +1947,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         yCount++;
       }
 
-      console.log(yCount);
-      console.log(xCount);
       this.renderingStatus = 'Rendering Complete';
+    },
+    drawText: function drawText(ctx, fillStyle, text, x, y) {
+      ctx.fillStyle = fillStyle;
+      ctx.fillText(text, x, y);
+    },
+    drawArc: function drawArc(ctx, x, y, r) {
+      ctx.beginPath();
+      ctx.arc(x, y, r, 10, 0, 2 * Math.PI, false);
+      ctx.fillStyle = 'green';
+      ctx.fill();
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = '#003300';
+      ctx.stroke();
+    },
+    drawRect: function drawRect(ctx, x, y, w, h, fillStyle, lineWidth, strokeStyle) {
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+      ctx.lineWidth = lineWidth;
+      ctx.strokeStyle = strokeStyle;
+      ctx.stroke();
     }
   }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
@@ -2436,7 +2452,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {
     var _this2 = this;
 
-    Echo.channel("game").listen('GameStarted', function (e) {
+    window.Echo["private"]("game.".concat(this.gameId)).listen('GameStarted', function (e) {
       _this2.setGame(e.game);
     });
   },
