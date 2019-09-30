@@ -38,30 +38,36 @@
                 provider: this.provider
             }
         },
+        props: ['gameId'],
         mounted() {
-            mapApi.getMap(this.gameId).then((response) => {
-                this.setMap(response.data);
 
-                // We can't access the rendering context until the canvas is mounted to the DOM.
-                // Once we have it, provide it to all child components.
-                this.provider.context = this.$refs['map-canvas'].getContext('2d');
-
-                // Resize the canvas to fit its parent's width.
-                // Normally you'd use a more flexible resize system.
-                // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
-                // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
-
-
-                this.render();
+            window.Echo.private(`game.${this.gameId}`).listen('NextTurn', (e) => {
+                this.loadMap();
             });
 
-            // Echo.channel(`game.${this.gameId}`).listen('NextTurn', (e) => {
-            //     this.setMap(e.map);
-            //     this.render();
-            // });
+            this.loadMap();
 
         },
         methods: {
+
+            loadMap()
+            {
+                mapApi.getMap(this.gameId).then((response) => {
+                    this.setMap(response.data);
+
+                    // We can't access the rendering context until the canvas is mounted to the DOM.
+                    // Once we have it, provide it to all child components.
+                    this.provider.context = this.$refs['map-canvas'].getContext('2d');
+
+                    // Resize the canvas to fit its parent's width.
+                    // Normally you'd use a more flexible resize system.
+                    // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+                    // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
+
+
+                    this.render();
+                });
+            },
 
             ...mapActions({
                 setMap: 'map/setMap'

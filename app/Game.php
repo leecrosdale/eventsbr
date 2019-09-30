@@ -24,6 +24,16 @@ class Game extends Model
         return $this->belongsToMany(Item::class)->withPivot(['x','y']);
     }
 
+    public function actions()
+    {
+        return $this->hasMany(Action::class);
+    }
+
+    public function unfinshed_actions()
+    {
+        return $this->hasMany(Action::class)->where('complete', false);
+    }
+
 
     public function generateMap($x = null, $y = null)
     {

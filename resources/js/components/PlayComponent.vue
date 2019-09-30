@@ -4,8 +4,8 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Play -
-                        <button class="btn btn-success">End Turn</button>
+                    <div class="card-header">Play - Turn {{ game.current_turn }}
+                        <button class="btn btn-success" @click="endTurn">End Turn ({{ timer }})</button>
                     </div>
                     <div class="card-body" >
                         <div>
@@ -32,7 +32,7 @@
                             <div class="row" v-else-if="player.pivot !== undefined && game.status === 1">
                                 <div class="col-md-6">
 <!--                                    <map-overview-component></map-overview-component>-->
-                                    <canvas-map-component></canvas-map-component>
+                                    <canvas-map-component :gameId="gameId"></canvas-map-component>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">
@@ -176,31 +176,41 @@
     export default {
         mounted() {
 
-            playerApi.getPlayer().then((response) => {
-                this.setPlayer(response.data);
-            });
-
-            actionApi.getActions().then((response) => {
-                this.setActions(response.data);
-            });
-
-            gameApi.getGame(this.gameId).then((response) => {
-                this.setGame(response.data);
-            });
+            this.loadGame();
 
         },
         created() {
             window.Echo.private(`game.${this.gameId}`).listen('GameStarted', (e) => {
                this.setGame(e.game);
             });
+            window.Echo.private(`game.${this.gameId}`).listen('NextTurn', (e) => {
+                console.log("Next turn");
+                this.setGame(e.game);
+                this.loadGame();
+            });
         },
         data() {
             return {
                 states: ['Standing', 'Crawling'],
-                stats: []
+                stats: [],
+                timer: 30
             }
         },
         methods: {
+
+            loadGame() {
+                playerApi.getPlayer().then((response) => {
+                    this.setPlayer(response.data);
+                });
+
+                gameApi.getGame(this.gameId).then((response) => {
+                    this.setGame(response.data);
+                });
+
+                actionApi.getActions().then((response) => {
+                    this.setActions(response.data);
+                });
+            },
 
             // Move
 
@@ -211,6 +221,10 @@
             // Pickup
 
             // End Turn
+            endTurn()
+            {
+                console.log("Fire event here");
+            },
 
             ...mapActions({
                 setGame: 'game/setGame',

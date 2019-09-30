@@ -13,6 +13,12 @@
 
 
 Broadcast::channel('game.{gameId}', function ($user, $gameId) {
+    return true;
     //return $user->id === Order::findOrNew($orderId)->user_id;
-    return true; // TODO Add logic to check if user is actually in the game.
+    $player = $user->player;
+    $game = $player->games()->where('game_id', $gameId)->first();
+    if (!$game) {
+        return false;
+    }
+    return (bool) $game->players()->where('player_id', $player->id)->first(); // TODO Add logic to check if user is actually in the game.
 });

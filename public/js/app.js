@@ -1877,26 +1877,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       provider: this.provider
     };
   },
+  props: ['gameId'],
   mounted: function mounted() {
     var _this = this;
 
-    _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
-      _this.setMap(response.data); // We can't access the rendering context until the canvas is mounted to the DOM.
-      // Once we have it, provide it to all child components.
-
-
-      _this.provider.context = _this.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
-      // Normally you'd use a more flexible resize system.
-      // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
-      // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
-
-      _this.render();
-    }); // Echo.channel(`game.${this.gameId}`).listen('NextTurn', (e) => {
-    //     this.setMap(e.map);
-    //     this.render();
-    // });
+    window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
+      _this.loadMap();
+    });
+    this.loadMap();
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+  methods: _objectSpread({
+    loadMap: function loadMap() {
+      var _this2 = this;
+
+      _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
+        _this2.setMap(response.data); // We can't access the rendering context until the canvas is mounted to the DOM.
+        // Once we have it, provide it to all child components.
+
+
+        _this2.provider.context = _this2.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
+        // Normally you'd use a more flexible resize system.
+        // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+        // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
+
+        _this2.render();
+      });
+    }
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setMap: 'map/setMap'
   }), {
     render: function render() {
@@ -2437,32 +2444,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    var _this = this;
-
-    _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
-      _this.setPlayer(response.data);
-    });
-    _api_action__WEBPACK_IMPORTED_MODULE_2__["default"].getActions().then(function (response) {
-      _this.setActions(response.data);
-    });
-    _api_game__WEBPACK_IMPORTED_MODULE_3__["default"].getGame(this.gameId).then(function (response) {
-      _this.setGame(response.data);
-    });
+    this.loadGame();
   },
   created: function created() {
-    var _this2 = this;
+    var _this = this;
 
     window.Echo["private"]("game.".concat(this.gameId)).listen('GameStarted', function (e) {
-      _this2.setGame(e.game);
+      _this.setGame(e.game);
+    });
+    window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
+      console.log("Next turn");
+
+      _this.setGame(e.game);
+
+      _this.loadGame();
     });
   },
   data: function data() {
     return {
       states: ['Standing', 'Crawling'],
-      stats: []
+      stats: [],
+      timer: 30
     };
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+  methods: _objectSpread({
+    loadGame: function loadGame() {
+      var _this2 = this;
+
+      _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
+        _this2.setPlayer(response.data);
+      });
+      _api_game__WEBPACK_IMPORTED_MODULE_3__["default"].getGame(this.gameId).then(function (response) {
+        _this2.setGame(response.data);
+      });
+      _api_action__WEBPACK_IMPORTED_MODULE_2__["default"].getActions().then(function (response) {
+        _this2.setActions(response.data);
+      });
+    },
+    // Move
+    // Stance
+    // Shoot
+    // Pickup
+    // End Turn
+    endTurn: function endTurn() {
+      console.log("Fire event here");
+    }
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setGame: 'game/setGame',
     setPlayer: 'player/setPlayer',
     setActions: 'action/setActions'
@@ -48522,7 +48549,18 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v(
+              "Play - Turn " +
+                _vm._s(_vm.game.current_turn) +
+                "\n                        "
+            ),
+            _c(
+              "button",
+              { staticClass: "btn btn-success", on: { click: _vm.endTurn } },
+              [_vm._v("End Turn (" + _vm._s(_vm.timer) + ")")]
+            )
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", [
@@ -48555,7 +48593,11 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "col-md-6" },
-                      [_c("canvas-map-component")],
+                      [
+                        _c("canvas-map-component", {
+                          attrs: { gameId: _vm.gameId }
+                        })
+                      ],
                       1
                     ),
                     _vm._v(" "),
@@ -48577,7 +48619,7 @@ var render = function() {
                               "div",
                               { staticClass: "card-body" },
                               [
-                                _vm._m(1),
+                                _vm._m(0),
                                 _vm._v(" "),
                                 _c("controls-component")
                               ],
@@ -48600,7 +48642,7 @@ var render = function() {
                               "div",
                               { staticClass: "card-body" },
                               [
-                                _vm._m(2),
+                                _vm._m(1),
                                 _vm._v(" "),
                                 _c("controls-component")
                               ],
@@ -48671,7 +48713,7 @@ var render = function() {
                                     ])
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(3)
+                                  _vm._m(2)
                                 ])
                               ])
                             : _vm._e()
@@ -48739,15 +48781,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _vm._v("Play -\n                        "),
-      _c("button", { staticClass: "btn btn-success" }, [_vm._v("End Turn")])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -62015,6 +62048,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   getActions: function getActions() {
     return window.axios.get('actions');
+  },
+  getUnusedActions: function getUnusedActions() {
+    return window.axios.get('actions/unused');
   }
 });
 
