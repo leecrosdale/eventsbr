@@ -39,19 +39,21 @@ class ExecuteGameTick
 
             switch ($action->action) {
                 case ActionType::MOVE:
-
                     $player = $action->player;
                     $player->doMove($action->game, $action->data);
-
                     break;
 
+                case ActionType::PICKUP:
+                    $player = $action->player;
+                    $player->doPickup($action->game, $action->data);
+                    break;
             }
-
 
             $action->complete = true;
             $action->save();
-
         }
+
+        $game->game_players()->update(['stamina' => (int)config('game.stamina.max')]);
 
         ++$game->current_turn;
         $game->save();

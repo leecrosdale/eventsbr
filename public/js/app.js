@@ -2058,12 +2058,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     move: function move(direction) {
       var _this = this;
 
-      _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].move(direction).then(function (response) {
-        _this.addAction(response.data.action);
-      });
+      if (this.player.pivot.stamina >= 50) {
+        _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].move(direction).then(function (response) {
+          _this.addAction(response.data.action);
+        });
+        _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
+          _this.setPlayer(response.data);
+        });
+      }
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    addAction: 'action/addAction'
+    addAction: 'action/addAction',
+    setPlayer: 'player/setPlayer'
+  })),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    player: 'player/getPlayer'
   }))
 });
 
@@ -2154,6 +2163,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _api_player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../api/player */ "./resources/js/api/player.js");
 //
 //
 //
@@ -2162,9 +2172,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  methods: {
+    pickUp: function pickUp(item) {
+      _api_player__WEBPACK_IMPORTED_MODULE_0__["default"].pickup(item.id).then(function (response) {
+        console.log(response);
+      });
+    }
   },
   props: ['items']
 });
@@ -2480,6 +2498,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _api_action__WEBPACK_IMPORTED_MODULE_2__["default"].getActions().then(function (response) {
         _this2.setActions(response.data);
       });
+      console.log(this.items);
     },
     // Move
     // Stance
@@ -2499,9 +2518,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     game: 'game/getGame',
     player: 'player/getPlayer',
     actions: 'action/getActions',
-    map: 'map/getMap',
-    items: 'map/getItems'
-  })),
+    map: 'map/getMap'
+  }), {
+    items: function items() {
+      if (this.player.pivot) {
+        if (this.map[this.player.pivot.y] && this.map[this.player.pivot.y][this.player.pivot.x]) {
+          return this.map[this.player.pivot.y][this.player.pivot.x]['items'];
+        }
+      }
+
+      return null;
+    }
+  }),
   watch: {}
 });
 
@@ -48124,7 +48152,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("N")]
+          [_vm._v("UP")]
         ),
         _vm._v(" "),
         _c(
@@ -48137,7 +48165,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("NE")]
+          [_vm._v("UP-RIGHT")]
         ),
         _vm._v(" "),
         _c(
@@ -48150,7 +48178,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("E")]
+          [_vm._v("RIGHT")]
         ),
         _vm._v(" "),
         _c(
@@ -48163,7 +48191,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("SE")]
+          [_vm._v("DOWN-RIGHT")]
         ),
         _vm._v(" "),
         _c(
@@ -48176,7 +48204,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("S")]
+          [_vm._v("DOWN")]
         ),
         _vm._v(" "),
         _c(
@@ -48189,7 +48217,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("SW")]
+          [_vm._v("DOWN-LEFT")]
         ),
         _vm._v(" "),
         _c(
@@ -48202,7 +48230,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("W")]
+          [_vm._v("LEFT")]
         ),
         _vm._v(" "),
         _c(
@@ -48215,7 +48243,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("NW")]
+          [_vm._v("UP-LEFT")]
         )
       ])
     ])
@@ -48379,7 +48407,21 @@ var render = function() {
   return _c(
     "div",
     _vm._l(_vm.items, function(item) {
-      return _c("p", [_vm._v("\n        " + _vm._s(item.id) + "\n    ")])
+      return _c("p", [
+        _vm._v("\n        " + _vm._s(item.name) + " - "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            on: {
+              click: function($event) {
+                return _vm.pickUp(item)
+              }
+            }
+          },
+          [_vm._v("PickUp")]
+        )
+      ])
     }),
     0
   )
@@ -62107,6 +62149,11 @@ __webpack_require__.r(__webpack_exports__);
     return window.axios.post('move', {
       direction: direction
     });
+  },
+  pickup: function pickup(item_id) {
+    return window.axios.post('pickup', {
+      item_id: item_id
+    });
   }
 });
 
@@ -62864,7 +62911,8 @@ var getters = {
   getMap: function getMap(state) {
     return state.map;
   },
-  getItems: function getItems(state) {// return state.map.filter(function (col) {
+  getItems: function getItems(state) {
+    console.log(state.map); // return state.map.filter(function (col) {
     //     console.log(col);
     // })
   }

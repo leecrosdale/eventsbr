@@ -17,10 +17,27 @@ class PlayerController extends Controller
         return view('player.play')->withPlayer($player)->withGameId($game->id);
     }
 
+    public function pickup(Request $request, Game $game)
+    {
+        $player = $this->getPlayer($game);
+
+        $action = $player->pickup($game, $request->item_id);
+
+        $pivot = $player->gamePlayer($game)->first();
+        $pivot->stamina -= config('game.pickup.stamina_cost');
+        $pivot->save();
+
+        return ['status' => 'success', 'action' => $action];
+    }
+
     public function move(Request $request, Game $game)
     {
         $player = $this->getPlayer($game);
         $action = $player->move($game, $request->direction);
+
+        $pivot = $player->gamePlayer($game)->first();
+        $pivot->stamina -= config('game.move.stamina_cost');
+        $pivot->save();
 
         return ['status' => 'success', 'action' => $action];
     }

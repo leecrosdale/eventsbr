@@ -52,7 +52,8 @@ class ForceTurn extends Command
                 event(new GameTick($game));
             }
 
-            sleep(31);
+//            sleep(31);
+            sleep(3);
 
         }while(true);
 

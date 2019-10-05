@@ -35,18 +35,49 @@ class Player extends Model
     public function move(Game $game, $direction)
     {
         return Action::create([
-                'game_id' => $game->id,
+            'game_id' => $game->id,
+            'player_id' => $this->id,
+            'turn' => $game->current_turn,
+            'action' => ActionType::MOVE,
+            'data' => $direction
+        ]);
+    }
+
+    public function pickup(Game $game, $itemId)
+    {
+        return Action::create([
+            'game_id' => $game->id,
+            'player_id' => $this->id,
+            'turn' => $game->current_turn,
+            'action' => ActionType::PICKUP,
+            'data' => $itemId
+        ]);
+    }
+
+    public function doPickup(Game $game, $itemId)
+    {
+        $player = $this->gamePlayer($game)->first() ?: abort(404);
+        $item = GameItem::where('game_id', $game->id)->where('item_id', $itemId)->where('x', $player->x)->where('y', $player->y)->where('active', true)->first();
+
+        if ($item) {
+
+            $item->active = false;
+            $item->save();
+
+            PlayerItem::create([
                 'player_id' => $this->id,
-                'turn' => $game->current_turn,
-                'action' => ActionType::MOVE,
-                'data' => $direction
+                'game_id' => $game->id,
+                'item_id' => $item->item_id
             ]);
+
+        }
     }
 
     public function doMove(Game $game, $direction)
     {
 
         $player = $this->gamePlayer($game)->first() ?: abort(404);
+
 
         switch ($direction) {
 
@@ -80,6 +111,21 @@ class Player extends Model
                 break;
 
 
+        }
+
+        $max_x = $game->map->max_x;
+        $max_y = $game->map->max_y;
+
+        if ($player->y < 0) {
+            $player->y = 0;
+        } elseif ($player->y > $max_y) {
+            $player->y = $max_y;
+        }
+
+        if ($player->x < 0) {
+            $player->x = 0;
+        } elseif ($player->x > $max_x) {
+            $player->x = $max_x;
         }
 
         $player->save();

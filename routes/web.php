@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::get('get-player', 'PlayerController@getPlayer')->name('player.player');
         Route::get('data', 'GameController@data')->name('game.data');
         Route::post('move', 'PlayerController@move')->name('player.move');
+        Route::get('map-items', 'PlayerController@mapItems')->name('map.items');
+        Route::post('pickup', 'PlayerController@pickup')->name('player.pickup');
 
     });
 

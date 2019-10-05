@@ -210,6 +210,8 @@
                 actionApi.getActions().then((response) => {
                     this.setActions(response.data);
                 });
+
+                console.log(this.items);
             },
 
             // Move
@@ -239,9 +241,19 @@
                 game: 'game/getGame',
                 player: 'player/getPlayer',
                 actions: 'action/getActions',
-                map: 'map/getMap',
-                items: 'map/getItems'
-            })
+                map: 'map/getMap'
+            }),
+            items() {
+
+                if (this.player.pivot) {
+
+                    if (this.map[this.player.pivot.y] && this.map[this.player.pivot.y][this.player.pivot.x]) {
+                        return this.map[this.player.pivot.y][this.player.pivot.x]['items'];
+                    }
+                }
+                return null;
+
+            }
         },
         watch: {
 

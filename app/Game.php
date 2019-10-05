@@ -19,9 +19,14 @@ class Game extends Model
         return $this->belongsToMany(Player::class)->withPivot(Player::$pivotStats);
     }
 
+    public function game_players()
+    {
+        return $this->hasMany(GamePlayer::class);
+    }
+
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withPivot(['x','y']);
+        return $this->belongsToMany(Item::class)->withPivot(['x', 'y']);
     }
 
     public function actions()
@@ -59,7 +64,7 @@ class Game extends Model
                 ->where('y', '>=', $min_y)->where('y', '<=', $max_y)->get();
 
             $items = $this->items()->where('x', '>=', $min_x)->where('x', '<=', $max_x)
-                ->where('y', '>=', $min_y)->where('y', '<=', $max_y)->get();;
+                ->where('y', '>=', $min_y)->where('y', '<=', $max_y)->where('active', true)-> get();
 
         }
 

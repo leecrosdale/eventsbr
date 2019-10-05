@@ -42,7 +42,7 @@ class MapController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +53,7 @@ class MapController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Map  $map
+     * @param \App\Map $map
      * @return \Illuminate\Http\Response
      */
     public function show(Map $map)
@@ -64,7 +64,7 @@ class MapController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Map  $map
+     * @param \App\Map $map
      * @return \Illuminate\Http\Response
      */
     public function edit(Map $map)
@@ -75,8 +75,8 @@ class MapController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Map  $map
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Map $map
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Map $map)
@@ -87,7 +87,7 @@ class MapController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Map  $map
+     * @param \App\Map $map
      * @return \Illuminate\Http\Response
      */
     public function destroy(Map $map)

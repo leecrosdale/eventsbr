@@ -3,14 +3,14 @@
     <div>
         <div class="row py-2">
             <div class="col-md-12">
-                <button class="btn btn-primary" @click="move('N')">N</button>
-                <button class="btn btn-primary" @click="move('NE')">NE</button>
-                <button class="btn btn-primary" @click="move('E')">E</button>
-                <button class="btn btn-primary" @click="move('SE')">SE</button>
-                <button class="btn btn-primary" @click="move('S')">S</button>
-                <button class="btn btn-primary" @click="move('SW')">SW</button>
-                <button class="btn btn-primary" @click="move('W')">W</button>
-                <button class="btn btn-primary" @click="move('NW')">NW</button>
+                <button class="btn btn-primary" @click="move('N')">UP</button>
+                <button class="btn btn-primary" @click="move('NE')">UP-RIGHT</button>
+                <button class="btn btn-primary" @click="move('E')">RIGHT</button>
+                <button class="btn btn-primary" @click="move('SE')">DOWN-RIGHT</button>
+                <button class="btn btn-primary" @click="move('S')">DOWN</button>
+                <button class="btn btn-primary" @click="move('SW')">DOWN-LEFT</button>
+                <button class="btn btn-primary" @click="move('W')">LEFT</button>
+                <button class="btn btn-primary" @click="move('NW')">UP-LEFT</button>
             </div>
         </div>
     </div>
@@ -20,7 +20,6 @@
 <script>
 
     import {mapGetters, mapActions} from 'vuex'
-
     import playerApi from '../api/player';
 
     export default {
@@ -38,14 +37,22 @@
             // Move
             move(direction) {
 
-                playerApi.move(direction).then((response) => {
-                    this.addAction(response.data.action);
-                });
+                if (this.player.pivot.stamina >= 50) {
 
+                    playerApi.move(direction).then((response) => {
+                        this.addAction(response.data.action);
+                    });
+
+                    playerApi.getPlayer().then((response) => {
+                        this.setPlayer(response.data);
+                    });
+                }
             },
             ...mapActions({
-                addAction: 'action/addAction'
-            })
+                addAction: 'action/addAction',
+                setPlayer: 'player/setPlayer',
+            }),
+
 
             // Stance
 
@@ -54,6 +61,11 @@
             // Pickup
 
             // End Turn
-        }
+        },
+        computed: {
+            ...mapGetters({
+                player: 'player/getPlayer',
+            })
+        },
     }
 </script>

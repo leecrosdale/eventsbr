@@ -19,6 +19,7 @@ class CreateGameItemTable extends Migration
             $table->unsignedBigInteger('game_id');
             $table->integer('x');
             $table->integer('y');
+            $table->tinyInteger('active')->default(1);
             $table->timestamps();
 
             $table->foreign('item_id')->references('id')->on('items');
