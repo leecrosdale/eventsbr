@@ -8,17 +8,23 @@
 
 <script>
 
+    import {mapGetters, mapActions} from 'vuex'
     import playerApi from '../api/player';
+
 
     export default {
         mounted() {
             console.log('Component mounted.')
         },
         methods: {
+            ...mapActions({
+                addAction: 'action/addAction',
+                setPlayer: 'player/setPlayer',
+            }),
           pickUp(item) {
 
               playerApi.pickup(item.id).then(response => {
-                  console.log(response);
+                  this.addAction(response.data.action);
               });
 
           }

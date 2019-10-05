@@ -2163,7 +2163,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _api_player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../api/player */ "./resources/js/api/player.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _api_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api/player */ "./resources/js/api/player.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2173,17 +2180,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
   },
-  methods: {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
+    addAction: 'action/addAction',
+    setPlayer: 'player/setPlayer'
+  }), {
     pickUp: function pickUp(item) {
-      _api_player__WEBPACK_IMPORTED_MODULE_0__["default"].pickup(item.id).then(function (response) {
-        console.log(response);
+      var _this = this;
+
+      _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].pickup(item.id).then(function (response) {
+        _this.addAction(response.data.action);
       });
     }
-  },
+  }),
   props: ['items']
 });
 
@@ -48744,13 +48757,18 @@ var render = function() {
                                       )
                                     ]),
                                     _vm._v(" "),
-                                    _c("div", { staticClass: "col-md-6" }, [
+                                    _c("div", { staticClass: "col-md-8" }, [
                                       _vm._v(
                                         "\n                                                            " +
                                           _vm._s(
                                             _vm.states[_vm.player.pivot.state]
                                           ) +
-                                          "\n                                                        "
+                                          " - "
+                                      ),
+                                      _c(
+                                        "button",
+                                        { staticClass: "btn btn-success" },
+                                        [_vm._v("Switch Stance")]
                                       )
                                     ])
                                   ]),
@@ -48858,10 +48876,13 @@ var staticRenderFns = [
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "col-md-8" }, [
         _vm._v(
-          "\n                                                            Fists\n                                                        "
-        )
+          "\n                                                            Fists - "
+        ),
+        _c("button", { staticClass: "btn btn-success" }, [
+          _vm._v("Switch Weapon")
+        ])
       ])
     ])
   }

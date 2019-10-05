@@ -99,8 +99,8 @@
                                                         <div class="col-md-4">
                                                             Stance
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            {{ states[player.pivot.state] }}
+                                                        <div class="col-md-8">
+                                                            {{ states[player.pivot.state] }} - <button class="btn btn-success">Switch Stance</button>
                                                         </div>
                                                     </div>
 
@@ -108,8 +108,8 @@
                                                         <div class="col-md-4">
                                                             Weapon
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            Fists
+                                                        <div class="col-md-8">
+                                                            Fists - <button class="btn btn-success">Switch Weapon</button>
                                                         </div>
                                                     </div>
 
