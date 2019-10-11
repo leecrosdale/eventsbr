@@ -16,7 +16,7 @@ class GamePlayerTableSeeder extends Seeder
 
         foreach ($players as $player) {
 
-            $amount = random_int(1, 3);
+            $amount = random_int(1, \App\Game::all()->count());
 
             $games = \App\Game::all()->random($amount);
 

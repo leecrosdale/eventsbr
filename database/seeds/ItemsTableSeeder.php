@@ -18,14 +18,18 @@ class ItemsTableSeeder extends Seeder
         foreach ($weapons as $k => $weapon) {
             \App\Item::create([
                 'name' => $weapon,
-                'type' => \App\Enums\ItemType::WEAPON
+                'type' => \App\Enums\ItemType::WEAPON,
+                'stat' => random_int(5,100),
+                'distance' => random_int(1,5),
             ]);
         }
 
         foreach ($armours as $k => $armour) {
             \App\Item::create([
                 'name' => $armour,
-                'type' => \App\Enums\ItemType::ARMOR
+                'type' => \App\Enums\ItemType::ARMOR,
+                'stat' => random_int(5,100),
+                'distance' => random_int(1,5),
             ]);
         }
 

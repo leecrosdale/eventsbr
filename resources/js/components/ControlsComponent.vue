@@ -48,7 +48,7 @@
             // Move
             move(direction) {
 
-                if (this.player.pivot.stamina >= 50) {
+                if (this.player.stamina >= 50) {
 
                     playerApi.move(direction).then((response) => {
                         this.addAction(response.data.action);
@@ -70,7 +70,7 @@
             // Shoot
             shoot(direction) {
 
-                if (this.player.pivot.stamina >= 50) {
+                if (this.player.stamina >= 50) {
 
                     playerApi.shoot(direction).then((response) => {
                         this.addAction(response.data.action);

@@ -17,6 +17,8 @@ class CreateItemsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('type'); // Enums/ItemType
+            $table->integer('stat'); // Armor Value or Weapon Damage
+            $table->integer('distance'); // Distance (either Shoot distance, or armor safety distance)
             $table->timestamps();
         });
     }

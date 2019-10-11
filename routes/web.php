@@ -15,6 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function() {
+
+    $player = \App\GamePlayer::where('id',1)->first();
+    dd($player->weapon);
+
+});
+
 Auth::routes();
 
 
@@ -32,7 +39,7 @@ Route::group(['middleware' => 'auth:web'], function () {
 
         Route::get('actions', 'ActionController@index')->name('actions.index');
         Route::get('update-map', 'PlayerController@getUpdate')->name('player.update');
-        Route::get('get-player', 'PlayerController@getPlayer')->name('player.player');
+        Route::get('get-player', 'PlayerController@getGamePlayer')->name('player.player');
         Route::get('map-items', 'PlayerController@mapItems')->name('map.items');
         Route::get('data', 'GameController@data')->name('game.data');
 

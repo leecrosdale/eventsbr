@@ -5,6 +5,7 @@ namespace App;
 use App\Enums\ActionType;
 use App\Enums\GameStatus;
 use App\Enums\ItemType;
+use App\Events\Dead;
 use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
@@ -13,7 +14,6 @@ class Player extends Model
 
     public static $pivotStats = ['x', 'y', 'health', 'stamina', 'state'];
 
-    protected $appends = ['weapon', 'armor'];
 
     public function terrain()
     {
@@ -68,6 +68,87 @@ class Player extends Model
         ]);
     }
 
+    public function doShoot(Game $game, $direction)
+    {
+
+        $player = $this->gamePlayer($game)->first() ?: abort(404);
+
+
+        // Get Weapon
+        $weapon = $player->weapon;
+        $enemies = null;
+
+        if ($weapon) {
+
+            $distance = $weapon->distance;
+            $damage = $weapon->stat;
+
+            $x = $player->x;
+            $y = $player->y;
+
+            switch ($direction) {
+
+                case 'N':
+                    $y -= $distance;
+                    $enemies = $game->game_players()->where('x', $x)->where('y', '<=', $y);
+                    break;
+//                case 'NE':
+//                    --$player->y;
+//                    ++$player->x;
+//                    break;
+                case 'E':
+                    $x += $distance;
+                    $enemies = $game->game_players()->where('x', '>=', $x)->where('y', $y);
+                    break;
+//                case 'SE':
+//                    ++$player->y;
+//                    ++$player->x;
+//                    break;
+                case 'S':
+                    $y += $distance;
+                    $enemies = $game->game_players()->where('x', $x)->where('y', '>=', $y);
+                    break;
+//                case 'SW':
+//                    ++$player->y;
+//                    --$player->x;
+//                    break;
+                case 'W':
+                    $x -= $distance;
+                    $enemies = $game->game_players()->where('x', '<=', $x)->where('y', $y);
+                    break;
+//                case 'NW':
+//                    --$player->x;
+//                    --$player->y;
+//                    break;
+
+            }
+
+            if ($enemies && $enemies->exists()) {
+
+                $enemies->get()->each(function (GamePlayer $enemy) use ($game, $damage) {
+
+                    // Does enemy have armor
+                    if ($enemy->armor) {
+                        $healthLost = $damage / $enemy->armor->stat;
+                    } else {
+                        $healthLost = $damage;
+                    }
+
+                    $enemy->health -= $healthLost;
+                    $enemy->save();
+
+                    if ($enemy->health <= 0) {
+                        event(new Dead($game, $enemy));
+                    }
+
+                });
+            }
+
+        }
+
+
+    }
+
     public function doPickup(Game $game, $itemId)
     {
         $player = $this->gamePlayer($game)->first() ?: abort(404);
@@ -84,7 +165,7 @@ class Player extends Model
                 'item_id' => $item->item_id
             ]);
 
-            switch($item->item->type) {
+            switch ($item->item->type) {
 
                 case ItemType::WEAPON:
                     $player->item_weapon_id = $item->item_id;
@@ -159,14 +240,5 @@ class Player extends Model
 
     }
 
-    public function getWeaponAttribute()
-    {
-        return Item::where('id', $this->item_weapon_id)->first();
-    }
-
-    public function getArmorAttribute()
-    {
-        return Item::where('id', $this->item_armor_id)->first();
-    }
 
 }

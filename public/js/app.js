@@ -2074,7 +2074,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     move: function move(direction) {
       var _this = this;
 
-      if (this.player.pivot.stamina >= 50) {
+      if (this.player.stamina >= 50) {
         _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].move(direction).then(function (response) {
           _this.addAction(response.data.action);
         });
@@ -2092,7 +2092,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     shoot: function shoot(direction) {
       var _this2 = this;
 
-      if (this.player.pivot.stamina >= 50) {
+      if (this.player.stamina >= 50) {
         _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].shoot(direction).then(function (response) {
           _this2.addAction(response.data.action);
         });
@@ -2508,6 +2508,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2529,11 +2537,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       _this.loadGame();
     });
+    window.Echo["private"]("game.".concat(this.gameId, ".").concat(this.player.player_id)).listen('Dead', function (e) {
+      console.log("You're dead");
+      _this.status = 'dead';
+    });
   },
   data: function data() {
     return {
       states: ['Standing', 'Crawling'],
       stats: [],
+      status: null,
       timer: 30
     };
   },
@@ -2542,7 +2555,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
-        _this2.setPlayer(response.data);
+        _this2.setPlayer(response.data); // TODO If player is dead set status to dead..
+
       });
       _api_game__WEBPACK_IMPORTED_MODULE_3__["default"].getGame(this.gameId).then(function (response) {
         _this2.setGame(response.data);
@@ -2568,9 +2582,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     map: 'map/getMap'
   }), {
     items: function items() {
-      if (this.player.pivot) {
-        if (this.map[this.player.pivot.y] && this.map[this.player.pivot.y][this.player.pivot.x]) {
-          return this.map[this.player.pivot.y][this.player.pivot.x]['items'];
+      if (this.player) {
+        if (this.map[this.player.y] && this.map[this.player.y][this.player.x]) {
+          return this.map[this.player.y][this.player.x]['items'];
         }
       }
 
@@ -48667,7 +48681,7 @@ var render = function() {
                       )
                     ])
                   ])
-                : _vm.game.status === 2
+                : _vm.status === "dead"
                 ? _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-12" }, [
                       _vm._v(
@@ -48683,7 +48697,7 @@ var render = function() {
                       )
                     ])
                   ])
-                : _vm.player.pivot !== undefined && _vm.game.status === 1
+                : _vm.player !== undefined && _vm.game.status === 1
                 ? _c("div", { staticClass: "row" }, [
                     _c(
                       "div",
@@ -48703,9 +48717,9 @@ var render = function() {
                             _c("div", { staticClass: "card-header" }, [
                               _vm._v(
                                 "\n                                                    Movement - " +
-                                  _vm._s(_vm.player.pivot.x) +
+                                  _vm._s(_vm.player.x) +
                                   " , " +
-                                  _vm._s(_vm.player.pivot.y) +
+                                  _vm._s(_vm.player.y) +
                                   "\n                                                "
                               )
                             ]),
@@ -48753,7 +48767,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "row py-2" }, [
                         _c("div", { staticClass: "col-md-12" }, [
-                          _vm.player.pivot !== undefined
+                          _vm.player !== undefined
                             ? _c("div", { staticClass: "card" }, [
                                 _c("div", { staticClass: "card-header" }, [
                                   _vm._v(
@@ -48772,7 +48786,7 @@ var render = function() {
                                     _c("div", { staticClass: "col-md-6" }, [
                                       _vm._v(
                                         "\n                                                            " +
-                                          _vm._s(_vm.player.pivot.health) +
+                                          _vm._s(_vm.player.health) +
                                           "\n                                                        "
                                       )
                                     ])
@@ -48788,7 +48802,7 @@ var render = function() {
                                     _c("div", { staticClass: "col-md-6" }, [
                                       _vm._v(
                                         "\n                                                            " +
-                                          _vm._s(_vm.player.pivot.stamina) +
+                                          _vm._s(_vm.player.stamina) +
                                           "\n                                                        "
                                       )
                                     ])
@@ -48804,9 +48818,7 @@ var render = function() {
                                     _c("div", { staticClass: "col-md-8" }, [
                                       _vm._v(
                                         "\n                                                            " +
-                                          _vm._s(
-                                            _vm.states[_vm.player.pivot.state]
-                                          ) +
+                                          _vm._s(_vm.states[_vm.player.state]) +
                                           " - "
                                       ),
                                       _c(
@@ -48817,9 +48829,59 @@ var render = function() {
                                     ])
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(2),
+                                  _c("div", { staticClass: "row" }, [
+                                    _c("div", { staticClass: "col-md-4" }, [
+                                      _vm._v(
+                                        "\n                                                            Weapon\n                                                        "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    !_vm.player.weapon
+                                      ? _c("div", { staticClass: "col-md-8" }, [
+                                          _vm._v(
+                                            "\n                                                            Nothing\n                                                        "
+                                          )
+                                        ])
+                                      : _c("div", [
+                                          _vm._v(
+                                            "\n                                                            Your " +
+                                              _vm._s(_vm.player.weapon.name) +
+                                              " shoots " +
+                                              _vm._s(
+                                                _vm.player.weapon.distance
+                                              ) +
+                                              " squares for " +
+                                              _vm._s(_vm.player.weapon.stat) +
+                                              " damage\n                                                        "
+                                          )
+                                        ])
+                                  ]),
                                   _vm._v(" "),
-                                  _vm._m(3)
+                                  _c("div", { staticClass: "row" }, [
+                                    _c("div", { staticClass: "col-md-4" }, [
+                                      _vm._v(
+                                        "\n                                                            Armor\n                                                        "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    !_vm.player.armor
+                                      ? _c("div", { staticClass: "col-md-8" }, [
+                                          _vm._v(
+                                            "\n                                                            Nothing\n                                                        "
+                                          )
+                                        ])
+                                      : _c("div", [
+                                          _vm._v(
+                                            "\n                                                            " +
+                                              _vm._s(_vm.player.armor.name) +
+                                              "\n                                                            Your " +
+                                              _vm._s(_vm.player.armor.name) +
+                                              " has " +
+                                              _vm._s(_vm.player.armor.stat) +
+                                              " protection\n                                                        "
+                                          )
+                                        ])
+                                  ])
                                 ])
                               ])
                             : _vm._e()
@@ -48906,39 +48968,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _vm._v(
-          "\n                                                            Your current [weapon] shoots [2] squares\n                                                        "
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4" }, [
-        _vm._v(
-          "\n                                                            Weapon\n                                                        "
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-8" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4" }, [
-        _vm._v(
-          "\n                                                            Armor\n                                                        "
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-8" }, [
-        _vm._v(
-          "\n                                                            LVL1\n                                                        "
+          "\n                                                            Shoot!\n                                                        "
         )
       ])
     ])

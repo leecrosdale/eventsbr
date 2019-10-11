@@ -37,15 +37,19 @@ class ExecuteGameTick
 
         foreach ($actions as $action) {
 
+            $player = $action->player;
+
             switch ($action->action) {
                 case ActionType::MOVE:
-                    $player = $action->player;
                     $player->doMove($action->game, $action->data);
                     break;
 
                 case ActionType::PICKUP:
-                    $player = $action->player;
                     $player->doPickup($action->game, $action->data);
+                    break;
+
+                case ActionType::SHOOT:
+                    $player->doShoot($action->game, $action->data);
                     break;
             }
 
