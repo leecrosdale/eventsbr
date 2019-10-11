@@ -2046,12 +2046,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {},
-  data: function data() {
-    return {};
+  props: {
+    controlType: {
+      type: String,
+      required: true,
+      "default": 'move'
+    }
   },
   methods: _objectSpread({
     // Move
@@ -2070,7 +2086,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     addAction: 'action/addAction',
     setPlayer: 'player/setPlayer'
-  })),
+  }), {
+    // Stance
+    // Shoot
+    shoot: function shoot(direction) {
+      var _this2 = this;
+
+      if (this.player.pivot.stamina >= 50) {
+        _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].shoot(direction).then(function (response) {
+          _this2.addAction(response.data.action);
+        });
+        _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
+          _this2.setPlayer(response.data);
+        });
+      }
+    }
+  }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
     player: 'player/getPlayer'
   }))
@@ -2469,6 +2500,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2511,12 +2550,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _api_action__WEBPACK_IMPORTED_MODULE_2__["default"].getActions().then(function (response) {
         _this2.setActions(response.data);
       });
-      console.log(this.items);
     },
-    // Move
-    // Stance
-    // Shoot
-    // Pickup
     // End Turn
     endTurn: function endTurn() {
       console.log("Fire event here");
@@ -48155,109 +48189,115 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "row py-2" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("N")
-              }
-            }
-          },
-          [_vm._v("UP")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("NE")
-              }
-            }
-          },
-          [_vm._v("UP-RIGHT")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("E")
-              }
-            }
-          },
-          [_vm._v("RIGHT")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("SE")
-              }
-            }
-          },
-          [_vm._v("DOWN-RIGHT")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("S")
-              }
-            }
-          },
-          [_vm._v("DOWN")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("SW")
-              }
-            }
-          },
-          [_vm._v("DOWN-LEFT")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("W")
-              }
-            }
-          },
-          [_vm._v("LEFT")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.move("NW")
-              }
-            }
-          },
-          [_vm._v("UP-LEFT")]
-        )
+        _vm.controlType === "move"
+          ? _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.move("N")
+                    }
+                  }
+                },
+                [_vm._v("UP")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.move("E")
+                    }
+                  }
+                },
+                [_vm._v("RIGHT")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.move("S")
+                    }
+                  }
+                },
+                [_vm._v("DOWN")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.move("W")
+                    }
+                  }
+                },
+                [_vm._v("LEFT")]
+              )
+            ])
+          : _vm.controlType === "shoot"
+          ? _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.shoot("N")
+                    }
+                  }
+                },
+                [_vm._v("UP")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.shoot("E")
+                    }
+                  }
+                },
+                [_vm._v("RIGHT")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.shoot("S")
+                    }
+                  }
+                },
+                [_vm._v("DOWN")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.shoot("W")
+                    }
+                  }
+                },
+                [_vm._v("LEFT")]
+              )
+            ])
+          : _vm._e()
       ])
     ])
   ])
@@ -48676,7 +48716,9 @@ var render = function() {
                               [
                                 _vm._m(0),
                                 _vm._v(" "),
-                                _c("controls-component")
+                                _c("controls-component", {
+                                  attrs: { controlType: "move" }
+                                })
                               ],
                               1
                             )
@@ -48699,7 +48741,9 @@ var render = function() {
                               [
                                 _vm._m(1),
                                 _vm._v(" "),
-                                _c("controls-component")
+                                _c("controls-component", {
+                                  attrs: { controlType: "shoot" }
+                                })
                               ],
                               1
                             )
@@ -48773,7 +48817,9 @@ var render = function() {
                                     ])
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(2)
+                                  _vm._m(2),
+                                  _vm._v(" "),
+                                  _vm._m(3)
                                 ])
                               ])
                             : _vm._e()
@@ -48876,13 +48922,24 @@ var staticRenderFns = [
         )
       ]),
       _vm._v(" "),
+      _c("div", { staticClass: "col-md-8" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-4" }, [
+        _vm._v(
+          "\n                                                            Armor\n                                                        "
+        )
+      ]),
+      _vm._v(" "),
       _c("div", { staticClass: "col-md-8" }, [
         _vm._v(
-          "\n                                                            Fists - "
-        ),
-        _c("button", { staticClass: "btn btn-success" }, [
-          _vm._v("Switch Weapon")
-        ])
+          "\n                                                            LVL1\n                                                        "
+        )
       ])
     ])
   }
@@ -62168,6 +62225,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   move: function move(direction) {
     return window.axios.post('move', {
+      direction: direction
+    });
+  },
+  shoot: function shoot(direction) {
+    return window.axios.post('shoot', {
       direction: direction
     });
   },

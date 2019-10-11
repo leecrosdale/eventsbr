@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\GameTick;
 use App\Game;
+use App\GamePlayer;
 use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,13 +43,26 @@ class PlayerController extends Controller
         return ['status' => 'success', 'action' => $action];
     }
 
+    public function shoot(Request $request, Game $game)
+    {
+        $player = $this->getPlayer($game);
+        $action = $player->shoot($game, $request->direction);
+
+        $pivot = $player->gamePlayer($game)->first();
+        $pivot->stamina -= config('game.shoot.stamina_cost');
+        $pivot->save();
+
+        return ['status' => 'success', 'action' => $action];
+
+    }
+
     public function getPlayer(Game $game)
     {
         $player = Auth::user()->player;
 
         $game = $player->games()->where('game_id', $game->id)->first() ?: abort(404);
 
-        return $game->players()->where('player_id', $player->id)->first();
+        return GamePlayer::where('game_id', $game->id)->where('player_id', $player->id)->with('player')->first();
     }
 
     public function getUpdate(Game $game)
@@ -59,7 +73,7 @@ class PlayerController extends Controller
 
         $gameData = $game->pivot;
 
-       return $game->generateMap($gameData->x, $gameData->y);
+        return $game->generateMap($gameData->x, $gameData->y);
     }
 
     public function action(Request $request)

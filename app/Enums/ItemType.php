@@ -8,6 +8,6 @@ class ItemType extends Enum
 {
 
     const WEAPON = 'weapon';
-    const ARMOUR = 'armour';
+    const ARMOR = 'armor';
 
 }

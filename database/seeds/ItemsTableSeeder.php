@@ -25,7 +25,7 @@ class ItemsTableSeeder extends Seeder
         foreach ($armours as $k => $armour) {
             \App\Item::create([
                 'name' => $armour,
-                'type' => \App\Enums\ItemType::ARMOUR
+                'type' => \App\Enums\ItemType::ARMOR
             ]);
         }
 

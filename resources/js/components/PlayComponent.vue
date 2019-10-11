@@ -47,7 +47,7 @@
                                                             Center of zone is [CENTER]
                                                         </div>
                                                     </div>
-                                                    <controls-component></controls-component>
+                                                    <controls-component controlType="move"></controls-component>
                                                 </div>
                                             </div>
                                         </div>
@@ -64,7 +64,7 @@
                                                             Your current [weapon] shoots [2] squares
                                                         </div>
                                                     </div>
-                                                    <controls-component></controls-component>
+                                                    <controls-component controlType="shoot"></controls-component>
                                                 </div>
                                             </div>
                                         </div>
@@ -109,7 +109,15 @@
                                                             Weapon
                                                         </div>
                                                         <div class="col-md-8">
-                                                            Fists - <button class="btn btn-success">Switch Weapon</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            Armor
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            LVL1
                                                         </div>
                                                     </div>
 
@@ -210,17 +218,7 @@
                 actionApi.getActions().then((response) => {
                     this.setActions(response.data);
                 });
-
-                console.log(this.items);
             },
-
-            // Move
-
-            // Stance
-
-            // Shoot
-
-            // Pickup
 
             // End Turn
             endTurn()

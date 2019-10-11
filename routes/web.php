@@ -29,12 +29,15 @@ Route::group(['middleware' => 'auth:web'], function () {
 
         Route::get('overview', 'MapController@overview')->name('map.overview');
         Route::get('play', 'PlayerController@play')->name('player.play');
+
         Route::get('actions', 'ActionController@index')->name('actions.index');
         Route::get('update-map', 'PlayerController@getUpdate')->name('player.update');
         Route::get('get-player', 'PlayerController@getPlayer')->name('player.player');
-        Route::get('data', 'GameController@data')->name('game.data');
-        Route::post('move', 'PlayerController@move')->name('player.move');
         Route::get('map-items', 'PlayerController@mapItems')->name('map.items');
+        Route::get('data', 'GameController@data')->name('game.data');
+
+        Route::post('move', 'PlayerController@move')->name('player.move');
+        Route::post('shoot', 'PlayerController@shoot')->name('player.shoot');
         Route::post('pickup', 'PlayerController@pickup')->name('player.pickup');
 
     });
@@ -42,7 +45,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::group(['prefix' => 'admin', 'middleware' => 'userIsAdmin'], function() {
         Route::get('/', 'GameController@listGames');
         Route::get('/game/{game}/start', 'GameController@start')->name('game.start');
-
     });
 
 });

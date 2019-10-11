@@ -9,5 +9,6 @@ class ActionType extends Enum
 
     const MOVE = 'move';
     const PICKUP = 'pickup';
+    const SHOOT = 'shoot';
 
 }

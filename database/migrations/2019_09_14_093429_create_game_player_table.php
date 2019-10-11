@@ -24,12 +24,19 @@ class CreateGamePlayerTable extends Migration
             $table->integer('health')->default(100);
             $table->integer('stamina')->default(100);
 
+            $table->unsignedBigInteger('item_weapon_id')->nullable();
+            $table->unsignedBigInteger('item_armor_id')->nullable();
+
             $table->tinyInteger('state'); // Standing / Crawling
 
             $table->timestamps();
 
             $table->foreign('player_id')->references('id')->on('players');
             $table->foreign('game_id')->references('id')->on('games');
+
+            $table->foreign('item_weapon_id')->references('id')->on('items');
+            $table->foreign('item_armor_id')->references('id')->on('items');
+
         });
     }
 

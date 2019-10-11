@@ -4,6 +4,7 @@ namespace App;
 
 use App\Enums\ActionType;
 use App\Enums\GameStatus;
+use App\Enums\ItemType;
 use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
@@ -11,6 +12,8 @@ class Player extends Model
     protected $with = ['terrain'];
 
     public static $pivotStats = ['x', 'y', 'health', 'stamina', 'state'];
+
+    protected $appends = ['weapon', 'armor'];
 
     public function terrain()
     {
@@ -43,6 +46,17 @@ class Player extends Model
         ]);
     }
 
+    public function shoot(Game $game, $direction)
+    {
+        return Action::create([
+            'game_id' => $game->id,
+            'player_id' => $this->id,
+            'turn' => $game->current_turn,
+            'action' => ActionType::SHOOT,
+            'data' => $direction
+        ]);
+    }
+
     public function pickup(Game $game, $itemId)
     {
         return Action::create([
@@ -59,7 +73,7 @@ class Player extends Model
         $player = $this->gamePlayer($game)->first() ?: abort(404);
         $item = GameItem::where('game_id', $game->id)->where('item_id', $itemId)->where('x', $player->x)->where('y', $player->y)->where('active', true)->first();
 
-        if ($item) {
+        if ($player && $item) {
 
             $item->active = false;
             $item->save();
@@ -69,6 +83,19 @@ class Player extends Model
                 'game_id' => $game->id,
                 'item_id' => $item->item_id
             ]);
+
+            switch($item->item->type) {
+
+                case ItemType::WEAPON:
+                    $player->item_weapon_id = $item->item_id;
+                    break;
+                case ItemType::ARMOR:
+                    $player->item_armor_id = $item->item_id;
+                    break;
+
+            }
+
+            $player->save();
 
         }
     }
@@ -130,6 +157,16 @@ class Player extends Model
 
         $player->save();
 
+    }
+
+    public function getWeaponAttribute()
+    {
+        return Item::where('id', $this->item_weapon_id)->first();
+    }
+
+    public function getArmorAttribute()
+    {
+        return Item::where('id', $this->item_armor_id)->first();
     }
 
 }
