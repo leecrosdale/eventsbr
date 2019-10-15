@@ -9,7 +9,7 @@ class Game extends Model
 {
 //    protected $with = ['players', 'items'];
 
-    protected $with = ['players'];
+//    protected $with = ['players'];
 
     public function map()
     {
