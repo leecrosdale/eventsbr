@@ -2572,6 +2572,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -48761,7 +48762,7 @@ var render = function() {
                       )
                     ])
                   ])
-                : _vm.game.status === 3
+                : _vm.game.status === 2
                 ? _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-12" }, [
                       _vm._v(

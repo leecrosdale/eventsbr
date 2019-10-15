@@ -24,7 +24,8 @@
                                 </div>
                             </div>
 
-                            <div class="row" v-else-if="game.status === 3">
+
+                            <div class="row" v-else-if="game.status === 2">
                                 <div class="col-md-12">
                                    Game has ended - (Show leaderboard)
                                 </div>
@@ -210,9 +211,11 @@
             });
 
             window.Echo.private(`game.${this.gameId}.${this.player.player_id}`).listen('Dead', (e) => {
-               console.log("You're dead");
-               this.status = 'dead';
+                console.log("You're dead");
+                this.status = 'dead';
             });
+
+
 
             this.countDownTimer();
 

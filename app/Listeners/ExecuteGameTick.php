@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Enums\ActionType;
+use App\Enums\GameStatus;
 use App\Events\GameTick;
 use App\Events\NextTurn;
 use App\Game;
@@ -60,7 +61,15 @@ class ExecuteGameTick
         $game->game_players()->update(['stamina' => (int)config('game.stamina.max')]);
 
         ++$game->current_turn;
+
+        if ($game->game_players()->where('health', '>= 0')->count() <= 1) {
+            $game->status = GameStatus::ENDED;
+        }
+
         $game->save();
+
+
+
 
         event(new NextTurn($game));
     }
