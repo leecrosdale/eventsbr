@@ -4,7 +4,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Play - Turn {{ game.current_turn }} - {{ countDown }} seconds until next turn
+                    <div class="card-header" v-if="game.status === 1">Turn {{ game.current_turn }} - {{ countDown }} seconds until next turn
 <!--                        <button class="btn btn-success" @click="endTurn">End Turn ({{ timer }})</button>-->
                     </div>
                     <div class="card-body" >

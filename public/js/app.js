@@ -48734,15 +48734,17 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v(
-              "Play - Turn " +
-                _vm._s(_vm.game.current_turn) +
-                " - " +
-                _vm._s(_vm.countDown) +
-                " seconds until next turn\n"
-            )
-          ]),
+          _vm.game.status === 1
+            ? _c("div", { staticClass: "card-header" }, [
+                _vm._v(
+                  "Turn " +
+                    _vm._s(_vm.game.current_turn) +
+                    " - " +
+                    _vm._s(_vm.countDown) +
+                    " seconds until next turn\n"
+                )
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", [
