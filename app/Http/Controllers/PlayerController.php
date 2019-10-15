@@ -91,8 +91,6 @@ class PlayerController extends Controller
     {
         $player = Auth::user()->player;
 
-        $game = $player->games()->where('game_id', $game->id)->first() ?: abort(404);
-
         return GamePlayer::where('game_id', $game->id)->where('player_id', $player->id)->with('player')->first();
     }
 
