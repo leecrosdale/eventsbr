@@ -15,12 +15,12 @@ class GameController extends Controller
 
 
     public function publicList() {
-        return view('game.list')->withGames(Game::all());
+        return view('game.list')->withGames(Game::where('status', '!=', GameStatus::ENDED)->get());
     }
 
     public function listGames()
     {
-        return view('admin.game.index')->withGames(Game::where('status', '!=', GameStatus::ENDED)->get());
+        return view('admin.game.index')->withGames(Game::all());
     }
 
     public function overview(Game $game)
