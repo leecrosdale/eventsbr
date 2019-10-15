@@ -38,9 +38,6 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::get('join', 'PlayerController@join')->name('game.join');
 
 
-
-
-
         Route::get('overview', 'MapController@overview')->name('map.overview');
         Route::get('play', 'PlayerController@play')->name('player.play');
 

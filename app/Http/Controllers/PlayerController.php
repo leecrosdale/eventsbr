@@ -60,7 +60,7 @@ class PlayerController extends Controller
     {
 
         $player = Auth::user()->player;
-        $gamePlayer = GamePlayer::where('player_id', $player->id)->first();
+        $gamePlayer = GamePlayer::where('player_id', $player->id)->where('game_id', $game->id)->first();
 
         if (!$gamePlayer) {
             GamePlayer::create([
@@ -97,6 +97,8 @@ class PlayerController extends Controller
     public function getUpdate(Game $game)
     {
         $player = Auth::user()->player;
+
+
 
         $game = $player->games()->where('game_id', $game->id)->first() ?: abort(404);
 
