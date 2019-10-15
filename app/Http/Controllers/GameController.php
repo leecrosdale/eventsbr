@@ -20,7 +20,7 @@ class GameController extends Controller
 
     public function listGames()
     {
-        return view('admin.game.index')->withGames(Game::all());
+        return view('admin.game.index')->withGames(Game::where('status', '!=', GameStatus::ENDED)->get());
     }
 
     public function overview(Game $game)
