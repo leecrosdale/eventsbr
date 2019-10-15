@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
 {
+    protected $guarded = [];
+
     protected $with = ['terrain'];
 
     public static $pivotStats = ['x', 'y', 'health', 'stamina', 'state'];

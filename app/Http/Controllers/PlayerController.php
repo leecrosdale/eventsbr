@@ -59,11 +59,10 @@ class PlayerController extends Controller
     public function join(Game $game)
     {
 
-        $player = $this->getPlayer($game);
+        $player = Auth::user()->player;
+        $gamePlayer = GamePlayer::where('player_id', $player->id)->first();
 
-        if (!$player) {
-
-
+        if (!$gamePlayer) {
             GamePlayer::create([
                 'player_id' => Auth::user()->player->id,
                 'game_id' => $game->id,
@@ -71,7 +70,6 @@ class PlayerController extends Controller
                 'y' => random_int(0, $game->map->max_y),
                 'state' => 1
             ]);
-
         }
 
         return redirect(route('player.play', $game));

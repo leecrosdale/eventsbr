@@ -53,7 +53,7 @@ class ForceTurn extends Command
             }
 
 //            sleep(31);
-            sleep(3);
+            sleep(15);
 
         }while(true);
 

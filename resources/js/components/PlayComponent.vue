@@ -4,21 +4,23 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Play - Turn {{ game.current_turn }}
-                        <button class="btn btn-success" @click="endTurn">End Turn ({{ timer }})</button>
+                    <div class="card-header">Play - Turn {{ game.current_turn }} - {{ countDown }} seconds until next turn
+<!--                        <button class="btn btn-success" @click="endTurn">End Turn ({{ timer }})</button>-->
                     </div>
                     <div class="card-body" >
                         <div>
                             <!-- Lobby -->
                             <div class="row" v-if="game.status === 0">
                                 <div class="col-md-12">
-                                    Game is starting - {{ game.players.length }} / {{ game.max_players }} players joined
+                                   Waiting to start.
+<!--                                    Game is starting - {{ game.players.length }} / {{ game.max_players }} players joined-->
                                 </div>
                             </div>
 
-                            <div class="row" v-else-if="status === 'dead'">
+                            <div class="row" v-else-if="player.health <= 0">
                                 <div class="col-md-12">
-                                   You have been killed by {X}
+                                   You have been killed
+<!--                                    by {x}-->
                                 </div>
                             </div>
 
@@ -95,14 +97,14 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            Stance
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            {{ states[player.state] }} - <button class="btn btn-success">Switch Stance</button>
-                                                        </div>
-                                                    </div>
+<!--                                                    <div class="row">-->
+<!--                                                        <div class="col-md-4">-->
+<!--                                                            Stance-->
+<!--                                                        </div>-->
+<!--                                                        <div class="col-md-8">-->
+<!--                                                            {{ states[player.state] }} - <button class="btn btn-success">Switch Stance</button>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
 
                                                     <div class="row">
                                                         <div class="col-md-4">
@@ -198,10 +200,12 @@
         created() {
             window.Echo.private(`game.${this.gameId}`).listen('GameStarted', (e) => {
                this.setGame(e.game);
+                this.resetCountdown()
             });
             window.Echo.private(`game.${this.gameId}`).listen('NextTurn', (e) => {
                 console.log("Next turn");
                 this.setGame(e.game);
+                this.resetCountdown();
                 this.loadGame();
             });
 
@@ -210,16 +214,29 @@
                this.status = 'dead';
             });
 
+            this.countDownTimer();
+
         },
         data() {
             return {
                 states: ['Standing', 'Crawling'],
                 stats: [],
                 status: null,
-                timer: 30
+                countDown: 15
             }
         },
         methods: {
+            countDownTimer() {
+                if(this.countDown > 0) {
+                    setTimeout(() => {
+                        this.countDown -= 1;
+                        this.countDownTimer()
+                    }, 1000)
+                }
+            },
+            resetCountdown(){
+                this.countDown = 15;
+            },
 
             loadGame() {
                 playerApi.getPlayer().then((response) => {

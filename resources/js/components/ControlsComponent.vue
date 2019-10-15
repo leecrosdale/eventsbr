@@ -5,23 +5,25 @@
             <div class="col-md-12">
 
                 <div v-if="controlType === 'move'">
+                    <button class="btn btn-primary" @click="move('W')">LEFT</button>
                     <button class="btn btn-primary" @click="move('N')">UP</button>
     <!--                <button class="btn btn-primary" @click="move('NE')">UP-RIGHT</button>-->
-                    <button class="btn btn-primary" @click="move('E')">RIGHT</button>
+
     <!--                <button class="btn btn-primary" @click="move('SE')">DOWN-RIGHT</button>-->
                     <button class="btn btn-primary" @click="move('S')">DOWN</button>
     <!--                <button class="btn btn-primary" @click="move('SW')">DOWN-LEFT</button>-->
-                    <button class="btn btn-primary" @click="move('W')">LEFT</button>
+                    <button class="btn btn-primary" @click="move('E')">RIGHT</button>
     <!--                <button class="btn btn-primary" @click="move('NW')">UP-LEFT</button>-->
                 </div>
                 <div v-else-if="controlType === 'shoot'">
+                    <button class="btn btn-primary" @click="shoot('W')">LEFT</button>
                     <button class="btn btn-primary" @click="shoot('N')">UP</button>
                     <!--                <button class="btn btn-primary" @click="move('NE')">UP-RIGHT</button>-->
-                    <button class="btn btn-primary" @click="shoot('E')">RIGHT</button>
                     <!--                <button class="btn btn-primary" @click="move('SE')">DOWN-RIGHT</button>-->
                     <button class="btn btn-primary" @click="shoot('S')">DOWN</button>
+                    <button class="btn btn-primary" @click="shoot('E')">RIGHT</button>
                     <!--                <button class="btn btn-primary" @click="move('SW')">DOWN-LEFT</button>-->
-                    <button class="btn btn-primary" @click="shoot('W')">LEFT</button>
+
                     <!--                <button class="btn btn-primary" @click="move('NW')">UP-LEFT</button>-->
                 </div>
             </div>

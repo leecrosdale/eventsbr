@@ -34,7 +34,7 @@
             }
         },
 
-        // Allows any child component to `inject: ['provider']` and have access to it.
+        // Allows any child `to `inject: ['provider']` and have access to it.
         provide() {
             return {
                 provider: this.provider
@@ -42,17 +42,35 @@
         },
         props: ['gameId', 'overview'],
         mounted() {
-
             if (!this.overview) {
+                this.loadMap();
+            } else {
+
+                this.provider.width = "4000px";
+                this.provider.height = "2000px";
+
+
+
+                this.loadMap(true);
+            }
+
+        },
+        created() {
+
+            console.log(this.gameId);
+
+            if (this.overview) {
                 window.Echo.private(`game.${this.gameId}`).listen('NextTurn', (e) => {
+                    console.log(e);
+                    this.loadMap(true);
+                });
+            } else {
+
+                window.Echo.private(`game.${this.gameId}`).listen('NextTurn', (e) => {
+                    console.log(e);
                     this.loadMap();
                 });
 
-                this.loadMap();
-            } else {
-                this.provider.width = "4000px";
-                this.provider.height = "2000px";
-                this.loadMap(true);
             }
 
         },

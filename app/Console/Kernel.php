@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreateNewGame;
 use App\Console\Commands\ForceTurn;
+use App\Console\Commands\GenerateMap;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +16,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ForceTurn::class
+        ForceTurn::class,
+        CreateNewGame::class,
+        GenerateMap::class
     ];
 
     /**

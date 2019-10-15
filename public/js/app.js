@@ -1873,7 +1873,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       renderingStatus: 'Not Rendering'
     };
   },
-  // Allows any child component to `inject: ['provider']` and have access to it.
+  // Allows any child `to `inject: ['provider']` and have access to it.
   provide: function provide() {
     return {
       provider: this.provider
@@ -1881,17 +1881,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: ['gameId', 'overview'],
   mounted: function mounted() {
-    var _this = this;
-
     if (!this.overview) {
-      window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
-        _this.loadMap();
-      });
       this.loadMap();
     } else {
       this.provider.width = "4000px";
       this.provider.height = "2000px";
       this.loadMap(true);
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    console.log(this.gameId);
+
+    if (this.overview) {
+      window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
+        console.log(e);
+
+        _this.loadMap(true);
+      });
+    } else {
+      window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
+        console.log(e);
+
+        _this.loadMap();
+      });
     }
   },
   methods: _objectSpread({
@@ -2054,6 +2068,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -2554,6 +2570,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -2567,11 +2585,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     window.Echo["private"]("game.".concat(this.gameId)).listen('GameStarted', function (e) {
       _this.setGame(e.game);
+
+      _this.resetCountdown();
     });
     window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
       console.log("Next turn");
 
       _this.setGame(e.game);
+
+      _this.resetCountdown();
 
       _this.loadGame();
     });
@@ -2579,28 +2601,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log("You're dead");
       _this.status = 'dead';
     });
+    this.countDownTimer();
   },
   data: function data() {
     return {
       states: ['Standing', 'Crawling'],
       stats: [],
       status: null,
-      timer: 30
+      countDown: 15
     };
   },
   methods: _objectSpread({
-    loadGame: function loadGame() {
+    countDownTimer: function countDownTimer() {
       var _this2 = this;
 
+      if (this.countDown > 0) {
+        setTimeout(function () {
+          _this2.countDown -= 1;
+
+          _this2.countDownTimer();
+        }, 1000);
+      }
+    },
+    resetCountdown: function resetCountdown() {
+      this.countDown = 15;
+    },
+    loadGame: function loadGame() {
+      var _this3 = this;
+
       _api_player__WEBPACK_IMPORTED_MODULE_1__["default"].getPlayer().then(function (response) {
-        _this2.setPlayer(response.data); // TODO If player is dead set status to dead..
+        _this3.setPlayer(response.data); // TODO If player is dead set status to dead..
 
       });
       _api_game__WEBPACK_IMPORTED_MODULE_3__["default"].getGame(this.gameId).then(function (response) {
-        _this2.setGame(response.data);
+        _this3.setGame(response.data);
       });
       _api_action__WEBPACK_IMPORTED_MODULE_2__["default"].getActions().then(function (response) {
-        _this2.setActions(response.data);
+        _this3.setActions(response.data);
       });
     },
     // End Turn
@@ -48249,11 +48286,11 @@ var render = function() {
                   staticClass: "btn btn-primary",
                   on: {
                     click: function($event) {
-                      return _vm.move("N")
+                      return _vm.move("W")
                     }
                   }
                 },
-                [_vm._v("UP")]
+                [_vm._v("LEFT")]
               ),
               _vm._v(" "),
               _c(
@@ -48262,11 +48299,11 @@ var render = function() {
                   staticClass: "btn btn-primary",
                   on: {
                     click: function($event) {
-                      return _vm.move("E")
+                      return _vm.move("N")
                     }
                   }
                 },
-                [_vm._v("RIGHT")]
+                [_vm._v("UP")]
               ),
               _vm._v(" "),
               _c(
@@ -48288,15 +48325,28 @@ var render = function() {
                   staticClass: "btn btn-primary",
                   on: {
                     click: function($event) {
-                      return _vm.move("W")
+                      return _vm.move("E")
                     }
                   }
                 },
-                [_vm._v("LEFT")]
+                [_vm._v("RIGHT")]
               )
             ])
           : _vm.controlType === "shoot"
           ? _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.shoot("W")
+                    }
+                  }
+                },
+                [_vm._v("LEFT")]
+              ),
+              _vm._v(" "),
               _c(
                 "button",
                 {
@@ -48308,19 +48358,6 @@ var render = function() {
                   }
                 },
                 [_vm._v("UP")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  on: {
-                    click: function($event) {
-                      return _vm.shoot("E")
-                    }
-                  }
-                },
-                [_vm._v("RIGHT")]
               ),
               _vm._v(" "),
               _c(
@@ -48342,11 +48379,11 @@ var render = function() {
                   staticClass: "btn btn-primary",
                   on: {
                     click: function($event) {
-                      return _vm.shoot("W")
+                      return _vm.shoot("E")
                     }
                   }
                 },
-                [_vm._v("LEFT")]
+                [_vm._v("RIGHT")]
               )
             ])
           : _vm._e()
@@ -48700,12 +48737,9 @@ var render = function() {
             _vm._v(
               "Play - Turn " +
                 _vm._s(_vm.game.current_turn) +
-                "\n                        "
-            ),
-            _c(
-              "button",
-              { staticClass: "btn btn-success", on: { click: _vm.endTurn } },
-              [_vm._v("End Turn (" + _vm._s(_vm.timer) + ")")]
+                " - " +
+                _vm._s(_vm.countDown) +
+                " seconds until next turn\n"
             )
           ]),
           _vm._v(" "),
@@ -48715,19 +48749,15 @@ var render = function() {
                 ? _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-12" }, [
                       _vm._v(
-                        "\n                                    Game is starting - " +
-                          _vm._s(_vm.game.players.length) +
-                          " / " +
-                          _vm._s(_vm.game.max_players) +
-                          " players joined\n                                "
+                        "\n                                   Waiting to start.\n"
                       )
                     ])
                   ])
-                : _vm.status === "dead"
+                : _vm.player.health <= 0
                 ? _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-12" }, [
                       _vm._v(
-                        "\n                                   You have been killed by {X}\n                                "
+                        "\n                                   You have been killed\n"
                       )
                     ])
                   ])
@@ -48846,27 +48876,6 @@ var render = function() {
                                         "\n                                                            " +
                                           _vm._s(_vm.player.stamina) +
                                           "\n                                                        "
-                                      )
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "row" }, [
-                                    _c("div", { staticClass: "col-md-4" }, [
-                                      _vm._v(
-                                        "\n                                                            Stance\n                                                        "
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "col-md-8" }, [
-                                      _vm._v(
-                                        "\n                                                            " +
-                                          _vm._s(_vm.states[_vm.player.state]) +
-                                          " - "
-                                      ),
-                                      _c(
-                                        "button",
-                                        { staticClass: "btn btn-success" },
-                                        [_vm._v("Switch Stance")]
                                       )
                                     ])
                                   ]),
@@ -63152,8 +63161,8 @@ var mutations = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/eventsbr/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/eventsbr/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/lee/code/eventbr/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/lee/code/eventbr/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
