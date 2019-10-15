@@ -1,7 +1,7 @@
 <template>
     <div class="my-canvas-wrapper">
         Status: {{ renderingStatus }}
-        <canvas ref="map-canvas" width="448px" height="448px" style="background: #000;"></canvas>
+        <canvas ref="map-canvas" :width="this.provider.width" :height="this.provider.height" style="background: #000;"></canvas>
         <slot></slot>
     </div>
 </template>
@@ -21,6 +21,8 @@
                     context: null,
                     tileW: 64,
                     tileH: 64,
+                    width: '448px',
+                    height: '448px'
                 },
                 terrainColors: [
                     '#228B22',
@@ -38,35 +40,64 @@
                 provider: this.provider
             }
         },
-        props: ['gameId'],
+        props: ['gameId', 'overview'],
         mounted() {
 
-            window.Echo.private(`game.${this.gameId}`).listen('NextTurn', (e) => {
-                this.loadMap();
-            });
+            if (!this.overview) {
+                window.Echo.private(`game.${this.gameId}`).listen('NextTurn', (e) => {
+                    this.loadMap();
+                });
 
-            this.loadMap();
+                this.loadMap();
+            } else {
+                this.provider.width = "4000px";
+                this.provider.height = "2000px";
+                this.loadMap(true);
+            }
 
         },
         methods: {
 
-            loadMap()
+            loadMap(overview = false)
             {
-                mapApi.getMap(this.gameId).then((response) => {
-                    this.setMap(response.data);
 
-                    // We can't access the rendering context until the canvas is mounted to the DOM.
-                    // Once we have it, provide it to all child components.
-                    this.provider.context = this.$refs['map-canvas'].getContext('2d');
+                if (!overview) {
+                    mapApi.getMap(this.gameId).then((response) => {
+                        this.setMap(response.data);
 
-                    // Resize the canvas to fit its parent's width.
-                    // Normally you'd use a more flexible resize system.
-                    // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
-                    // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
+                        // We can't access the rendering context until the canvas is mounted to the DOM.
+                        // Once we have it, provide it to all child components.
+                        this.provider.context = this.$refs['map-canvas'].getContext('2d');
+
+                        // Resize the canvas to fit its parent's width.
+                        // Normally you'd use a more flexible resize system.
+                        // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+                        // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
 
 
-                    this.render();
-                });
+                        this.render();
+                    });
+                } else {
+                    mapApi.getMapOverview(this.gameId).then((response) => {
+
+                        console.log(response.data);
+
+                        this.setMap(response.data);
+
+                        // We can't access the rendering context until the canvas is mounted to the DOM.
+                        // Once we have it, provide it to all child components.
+                        this.provider.context = this.$refs['map-canvas'].getContext('2d');
+
+                        // Resize the canvas to fit its parent's width.
+                        // Normally you'd use a more flexible resize system.
+                        // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+                        // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
+
+
+                        this.render();
+                    });
+
+                }
             },
 
             ...mapActions({

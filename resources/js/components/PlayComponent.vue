@@ -12,7 +12,7 @@
                             <!-- Lobby -->
                             <div class="row" v-if="game.status === 0">
                                 <div class="col-md-12">
-                                    Game is starting - 1/10 players joined
+                                    Game is starting - {{ game.players.length }} / {{ game.max_players }} players joined
                                 </div>
                             </div>
 

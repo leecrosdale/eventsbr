@@ -10,6 +10,8 @@ class GamePlayer extends Model
 
     protected $appends = ['weapon', 'armor'];
 
+    protected $guarded = [];
+
 
 //    public function game()
 //    {

@@ -39,19 +39,32 @@
     export default {
         mounted() {
 
-            mapApi.getMap(this.gameId).then((response) => {
-                this.setMap(response.data);
-            });
-
-
-            window.Echo.private(`game_id{$game_id}`).listen('NextTurn', (e) => {
+            if (!this.overview) {
                 mapApi.getMap(this.gameId).then((response) => {
                     this.setMap(response.data);
                 });
-            });
+
+                window.Echo.private(`game_id{$game_id}`).listen('NextTurn', (e) => {
+                    mapApi.getMap(this.gameId).then((response) => {
+                        this.setMap(response.data);
+                    });
+                });
+            } else {
+
+                mapApi.getMapOverview(this.gameId).then((response) => {
+                    this.setMap(response.data);
+                });
+
+                window.Echo.private(`game_id{$game_id}`).listen('NextTurn', (e) => {
+                    mapApi.getMapOverview(this.gameId).then((response) => {
+                        this.setMap(response.data);
+                    });
+                });
+
+            }
 
         },
-        props: ['gameId'],
+        props: ['gameId', 'overview'],
         data() {
             return {
                 terrainColors: [

@@ -56,6 +56,30 @@ class PlayerController extends Controller
 
     }
 
+    public function join(Game $game)
+    {
+
+        $player = $this->getPlayer($game);
+
+        if (!$player) {
+
+
+            GamePlayer::create([
+                'player_id' => Auth::user()->player->id,
+                'game_id' => $game->id,
+                'x' => random_int(0, $game->map->max_x),
+                'y' => random_int(0, $game->map->max_y),
+                'state' => 1
+            ]);
+
+        }
+
+        return redirect(route('player.play', $game));
+
+
+
+    }
+
     public function getPlayer(Game $game)
     {
         $player = Auth::user()->player;

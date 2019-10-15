@@ -5,14 +5,32 @@ namespace App\Http\Controllers;
 use App\Enums\GameStatus;
 use App\Events\GameStarted;
 use App\Game;
+use App\GamePlayer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
 
+
+
+    public function publicList() {
+        return view('game.list')->withGames(Game::all());
+    }
+
     public function listGames()
     {
         return view('admin.game.index')->withGames(Game::all());
+    }
+
+    public function overview(Game $game)
+    {
+        return view('admin.game.overview')->withGame($game);
+    }
+
+    public function getOverview(Game $game)
+    {
+        return $game->generateMap();
     }
 
     public function start(Game $game)

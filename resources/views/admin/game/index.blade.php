@@ -25,18 +25,24 @@
                                 <th>Edit</th>
                                 <th>View</th>
                             </tr>
-                        @foreach($games as $game)
-                            <tr>
-                                <td>{{ $game->id }}</td>
-                                <td>{{ $game->map->name }}</td>
-                                <td>{{ $game->status_string }}</td>
-                                <td>0/0/0</td>
-                                <td><a href="{{ route('game.start', $game) }}"><button>Start</button></a></td>
-                                <td><button>Edit</button></td>
-                                <td><button>View</button></td>
-                            </tr>
+                            @foreach($games as $game)
+                                <tr>
+                                    <td>{{ $game->id }}</td>
+                                    <td>{{ $game->map->name }}</td>
+                                    <td>{{ $game->status_string }}</td>
+                                    <td>0/0/0</td>
+                                    <td><a href="{{ route('game.start', $game) }}">
+                                            <button>Start</button>
+                                        </a></td>
+                                    <td>
+                                        <button>Edit</button>
+                                    </td>
+                                    <td><a href="{{ route('game.overview', $game) }}">
+                                            <button>View</button>
+                                        </a></td>
+                                </tr>
 
-                        @endforeach
+                            @endforeach
                         </table>
 
 

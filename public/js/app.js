@@ -1865,7 +1865,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         // This is the CanvasRenderingContext that children will draw to.
         context: null,
         tileW: 64,
-        tileH: 64
+        tileH: 64,
+        width: '448px',
+        height: '448px'
       },
       terrainColors: ['#228B22', '#808000', '#7CFC00', '#00BFFF'],
       renderingStatus: 'Not Rendering'
@@ -1877,31 +1879,56 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       provider: this.provider
     };
   },
-  props: ['gameId'],
+  props: ['gameId', 'overview'],
   mounted: function mounted() {
     var _this = this;
 
-    window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
-      _this.loadMap();
-    });
-    this.loadMap();
+    if (!this.overview) {
+      window.Echo["private"]("game.".concat(this.gameId)).listen('NextTurn', function (e) {
+        _this.loadMap();
+      });
+      this.loadMap();
+    } else {
+      this.provider.width = "4000px";
+      this.provider.height = "2000px";
+      this.loadMap(true);
+    }
   },
   methods: _objectSpread({
     loadMap: function loadMap() {
       var _this2 = this;
 
-      _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
-        _this2.setMap(response.data); // We can't access the rendering context until the canvas is mounted to the DOM.
-        // Once we have it, provide it to all child components.
+      var overview = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      if (!overview) {
+        _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
+          _this2.setMap(response.data); // We can't access the rendering context until the canvas is mounted to the DOM.
+          // Once we have it, provide it to all child components.
 
 
-        _this2.provider.context = _this2.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
-        // Normally you'd use a more flexible resize system.
-        // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
-        // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
+          _this2.provider.context = _this2.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
+          // Normally you'd use a more flexible resize system.
+          // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+          // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
 
-        _this2.render();
-      });
+          _this2.render();
+        });
+      } else {
+        _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMapOverview(this.gameId).then(function (response) {
+          console.log(response.data);
+
+          _this2.setMap(response.data); // We can't access the rendering context until the canvas is mounted to the DOM.
+          // Once we have it, provide it to all child components.
+
+
+          _this2.provider.context = _this2.$refs['map-canvas'].getContext('2d'); // Resize the canvas to fit its parent's width.
+          // Normally you'd use a more flexible resize system.
+          // this.$refs['map-canvas'].width = this.$refs['map-canvas'].parentElement.clientWidth;
+          // this.$refs['map-canvas'].height = this.$refs['map-canvas'].parentElement.clientHeight;
+
+          _this2.render();
+        });
+      }
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setMap: 'map/setMap'
@@ -2289,16 +2316,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     var _this = this;
 
-    _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
-      _this.setMap(response.data);
-    });
-    window.Echo["private"]("game_id{$game_id}").listen('NextTurn', function (e) {
-      _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(_this.gameId).then(function (response) {
+    if (!this.overview) {
+      _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(this.gameId).then(function (response) {
         _this.setMap(response.data);
       });
-    });
+      window.Echo["private"]("game_id{$game_id}").listen('NextTurn', function (e) {
+        _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMap(_this.gameId).then(function (response) {
+          _this.setMap(response.data);
+        });
+      });
+    } else {
+      _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMapOverview(this.gameId).then(function (response) {
+        _this.setMap(response.data);
+      });
+      window.Echo["private"]("game_id{$game_id}").listen('NextTurn', function (e) {
+        _api_map__WEBPACK_IMPORTED_MODULE_1__["default"].getMapOverview(_this.gameId).then(function (response) {
+          _this.setMap(response.data);
+        });
+      });
+    }
   },
-  props: ['gameId'],
+  props: ['gameId', 'overview'],
   data: function data() {
     return {
       terrainColors: ['#228B22', '#808000', '#7CFC00', '#00BFFF']
@@ -48170,7 +48208,7 @@ var render = function() {
       _c("canvas", {
         ref: "map-canvas",
         staticStyle: { background: "#000" },
-        attrs: { width: "448px", height: "448px" }
+        attrs: { width: this.provider.width, height: this.provider.height }
       }),
       _vm._v(" "),
       _vm._t("default")
@@ -48677,7 +48715,11 @@ var render = function() {
                 ? _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-12" }, [
                       _vm._v(
-                        "\n                                    Game is starting - 1/10 players joined\n                                "
+                        "\n                                    Game is starting - " +
+                          _vm._s(_vm.game.players.length) +
+                          " / " +
+                          _vm._s(_vm.game.max_players) +
+                          " players joined\n                                "
                       )
                     ])
                   ])
@@ -62235,6 +62277,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   getMap: function getMap() {
     return window.axios.get("update-map");
+  },
+  getMapOverview: function getMapOverview() {
+    return window.axios.get("update-map-overview");
   }
 });
 
@@ -63107,8 +63152,8 @@ var mutations = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/lee/code/eventbr/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/lee/code/eventbr/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/eventsbr/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/eventsbr/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

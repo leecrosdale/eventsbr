@@ -56,7 +56,7 @@
                                 <a class="nav-link" href="#">Leaderboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Games</a>
+                                <a class="nav-link" href="{{ route('game.list') }}">Games</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Help</a>

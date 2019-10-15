@@ -9,6 +9,8 @@ class Game extends Model
 {
 //    protected $with = ['players', 'items'];
 
+    protected $with = ['players'];
+
     public function map()
     {
         return $this->belongsTo(Map::class);

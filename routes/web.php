@@ -31,8 +31,15 @@ Route::group(['middleware' => 'auth:web'], function () {
     Broadcast::routes();
 
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/games', 'GameController@publicList')->name('game.list');
 
     Route::group(['prefix' => '{game}'], function () {
+
+        Route::get('join', 'PlayerController@join')->name('game.join');
+
+
+
+
 
         Route::get('overview', 'MapController@overview')->name('map.overview');
         Route::get('play', 'PlayerController@play')->name('player.play');
@@ -51,6 +58,9 @@ Route::group(['middleware' => 'auth:web'], function () {
 
     Route::group(['prefix' => 'admin', 'middleware' => 'userIsAdmin'], function() {
         Route::get('/', 'GameController@listGames');
+
+        Route::get('/{game}/overview', 'GameController@overview')->name('game.overview');
+        Route::get('/{game}/update-map-overview', 'GameController@getOverview')->name('game.update');
         Route::get('/game/{game}/start', 'GameController@start')->name('game.start');
     });
 
