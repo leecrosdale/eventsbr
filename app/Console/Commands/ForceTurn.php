@@ -42,6 +42,8 @@ class ForceTurn extends Command
     public function handle()
     {
 
+        $count = 0;
+
         do {
 
             $games = Game::where('status', GameStatus::RUNNING)->where('updated_at', '<=', Carbon::now()->addSeconds(-0.5)->toDateTimeString())->get();
@@ -55,7 +57,9 @@ class ForceTurn extends Command
 //            sleep(31);
             sleep(15);
 
-        }while(true);
+            $count++;
+
+        }while($count < 4);
 
 
     }
