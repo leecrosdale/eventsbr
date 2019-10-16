@@ -62,7 +62,7 @@ class ExecuteGameTick
 
         ++$game->current_turn;
 
-        if ($game->game_players()->where('health', '>= 0')->count() <= 1) {
+        if ($game->game_players()->where('health', '>=', 0)->count() <= 1) {
             $game->status = GameStatus::ENDED;
         }
 
