@@ -51,7 +51,7 @@ class ForceTurn extends Command
             foreach ($games as $game)
             {
                 $this->comment("Forcing tick of {$game->id}");
-                if ($game->unfinshed_actions()->count > 0) {
+                if ($game->unfinshed_actions()->count() > 0) {
                     // Only fire event if there are actions to run..
                     event(new GameTick($game));
                 }
